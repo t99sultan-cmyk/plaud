@@ -1,13 +1,10 @@
 import { Sparkles } from "lucide-react";
 import type { Summary } from "@/types/domain";
+import { SummarySkeleton } from "./skeletons";
 
 export function SummaryView({ summary }: { summary: Summary | null }) {
   if (!summary) {
-    return (
-      <div className="rounded-lg border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
-        Сводка ещё генерируется. Обычно это занимает 10–30 секунд после транскрипции.
-      </div>
-    );
+    return <SummarySkeleton />;
   }
 
   return (

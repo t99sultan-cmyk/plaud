@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import { FadeIn, StaggerChildren, StaggerItem, HoverLift } from "@/components/landing/animated";
 import { AnimatedCounter } from "@/components/landing/animated-counter";
+import { ScrollProgress } from "@/components/landing/scroll-progress";
 import { getLandingStats } from "@/lib/landing-stats";
 
 export const revalidate = 300; // 5 minutes
@@ -39,6 +40,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-svh bg-background">
+      <ScrollProgress />
       <Header isLoggedIn={isLoggedIn} />
       <Hero />
       <LiveCounters stats={stats} />
@@ -795,7 +797,7 @@ function Pricing() {
               minutes="10 минут"
               perMin="Без подписки"
               tagline="Чтобы попробовать"
-              cta="Начать"
+              cta="Начать без карты"
               ctaHref="/signup"
               features={[
                 "10 минут на старте",
@@ -813,7 +815,7 @@ function Pricing() {
               minutes="100 минут / мес"
               perMin="≈ 20 ₸ / мин"
               tagline="Личное использование"
-              cta="Подписаться"
+              cta="Оформить Старт"
               ctaHref="/checkout?plan=start"
               features={[
                 "100 минут каждый месяц",
@@ -831,7 +833,7 @@ function Pricing() {
               minutes="800 минут / мес"
               perMin="≈ 10 ₸ / мин"
               tagline="Постоянная работа"
-              cta="Подписаться"
+              cta="Стать активным"
               ctaHref="/checkout?plan=regular"
               savings="−33%"
               highlight
@@ -851,7 +853,7 @@ function Pricing() {
               minutes="2 500 минут / мес"
               perMin="≈ 8 ₸ / мин"
               tagline="Команды и активные юзеры"
-              cta="Подписаться"
+              cta="Получить максимум"
               ctaHref="/checkout?plan=active"
               savings="−47%"
               features={[

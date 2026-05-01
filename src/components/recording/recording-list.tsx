@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Clock, FileAudio, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { formatDuration, formatRelativeTime } from "@/lib/utils";
+import { cn, formatDuration, formatRelativeTime } from "@/lib/utils";
 import { StatusBadge } from "./status-badge";
 import type { Recording } from "@/types/domain";
 
@@ -51,24 +51,40 @@ export function RecordingList({ initial }: { initial: Recording[] }) {
           r.status === "transcribing" ||
           r.status === "summarizing" ||
           r.status === "uploading";
+        const failed = r.status === "failed";
+
         return (
           <li key={r.id}>
             <Link
               href={`/dashboard/recordings/${r.id}`}
-              className="flex items-center gap-4 rounded-xl border border-border/60 bg-card px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5"
+              className="group flex items-center gap-4 rounded-xl border border-border/60 bg-card px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-muted">
+              <div
+                className={cn(
+                  "relative flex size-12 shrink-0 items-center justify-center rounded-xl transition-colors",
+                  inProgress &&
+                    "bg-primary/10 text-primary",
+                  failed && "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                  !inProgress &&
+                    !failed &&
+                    "bg-gradient-to-br from-primary/15 to-fuchsia-500/10 text-primary",
+                )}
+              >
                 {inProgress ? (
-                  <Loader2 className="size-4 animate-spin text-primary" />
+                  <Loader2 className="size-5 animate-spin" />
                 ) : (
-                  <FileAudio className="size-4 text-muted-foreground" />
+                  <FileAudio className="size-5" />
+                )}
+                {/* Subtle pulse for in-progress */}
+                {inProgress && (
+                  <span className="absolute inset-0 -z-10 rounded-xl bg-primary/15 animate-pulse" />
                 )}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">{r.title}</p>
-                <p className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                <p className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                   <Clock className="size-3" />
-                  {formatDuration(r.duration_sec)}
+                  <span className="tabular-nums">{formatDuration(r.duration_sec)}</span>
                   <span aria-hidden>·</span>
                   <span>{formatRelativeTime(r.created_at)}</span>
                   {r.error_message && (

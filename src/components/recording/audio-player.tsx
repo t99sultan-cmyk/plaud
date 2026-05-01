@@ -1,7 +1,14 @@
 "use client";
 
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { Pause, Play } from "lucide-react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import { Pause, Play, Loader2 } from "lucide-react";
+import WaveSurfer from "wavesurfer.js";
 import { Button } from "@/components/ui/button";
 import { formatDuration } from "@/lib/utils";
 
@@ -17,63 +24,98 @@ export const AudioPlayer = forwardRef<
     duration?: number | null;
   }
 >(function AudioPlayer({ src, onTimeUpdate, duration }, ref) {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wsRef = useRef<WaveSurfer | null>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [actualDuration, setActualDuration] = useState<number | null>(
+    duration ?? null,
+  );
+
+  // Initialize WaveSurfer
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ws = WaveSurfer.create({
+      container: containerRef.current,
+      waveColor: "rgba(140, 110, 230, 0.4)",
+      progressColor: "rgb(140, 110, 230)",
+      cursorColor: "transparent",
+      barWidth: 2,
+      barRadius: 3,
+      barGap: 2,
+      height: 56,
+      normalize: true,
+      interact: true,
+    });
+    wsRef.current = ws;
+
+    ws.load(src);
+
+    ws.on("ready", () => {
+      setLoaded(true);
+      setActualDuration(ws.getDuration());
+    });
+    ws.on("play", () => setPlaying(true));
+    ws.on("pause", () => setPlaying(false));
+    ws.on("finish", () => setPlaying(false));
+    ws.on("timeupdate", (t) => {
+      setCurrent(t);
+      onTimeUpdate?.(t);
+    });
+
+    return () => {
+      ws.destroy();
+      wsRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src]);
 
   useImperativeHandle(ref, () => ({
     seek: (sec: number) => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = sec;
-        audioRef.current.play().catch(() => {});
-      }
+      const ws = wsRef.current;
+      if (!ws || !loaded) return;
+      const total = ws.getDuration();
+      if (total > 0) ws.seekTo(Math.min(sec, total) / total);
+      ws.play().catch(() => {});
     },
   }));
 
+  const totalSec = actualDuration ?? duration ?? 0;
+
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <Button
           size="icon"
           variant="default"
+          disabled={!loaded}
           onClick={() => {
-            const a = audioRef.current;
-            if (!a) return;
-            if (a.paused) a.play();
-            else a.pause();
+            const ws = wsRef.current;
+            if (!ws || !loaded) return;
+            if (ws.isPlaying()) ws.pause();
+            else ws.play();
           }}
+          className="size-10 shrink-0 rounded-full shadow-md shadow-primary/20"
         >
-          {playing ? <Pause className="size-4" /> : <Play className="size-4" />}
+          {!loaded ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : playing ? (
+            <Pause className="size-4 fill-current" />
+          ) : (
+            <Play className="size-4 fill-current" />
+          )}
         </Button>
-        <div className="flex flex-1 items-center gap-2 text-xs text-muted-foreground tabular-nums">
-          <span>{formatDuration(current)}</span>
-          <input
-            type="range"
-            min={0}
-            max={duration ?? 0}
-            step={0.1}
-            value={current}
-            onChange={(e) => {
-              const sec = Number(e.target.value);
-              if (audioRef.current) audioRef.current.currentTime = sec;
-            }}
-            className="flex-1 accent-primary"
-          />
-          <span>{formatDuration(duration)}</span>
+
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div ref={containerRef} className="w-full" />
+          <div className="flex items-center justify-between text-[10px] tabular-nums text-muted-foreground">
+            <span>{formatDuration(current)}</span>
+            <span>{formatDuration(totalSec)}</span>
+          </div>
         </div>
       </div>
-      <audio
-        ref={audioRef}
-        src={src}
-        preload="metadata"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onTimeUpdate={(e) => {
-          const t = e.currentTarget.currentTime;
-          setCurrent(t);
-          onTimeUpdate?.(t);
-        }}
-      />
     </div>
   );
 });

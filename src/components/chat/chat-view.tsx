@@ -202,17 +202,21 @@ function ChatBubble({
     <li className={cn("flex", role === "user" ? "justify-end" : "justify-start")}>
       <div
         className={cn(
-          "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm",
+          "max-w-[85%] px-4 py-3 text-sm shadow-sm",
           role === "user"
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground",
+            ? "rounded-2xl rounded-br-md bg-gradient-to-br from-primary to-primary/85 text-primary-foreground shadow-primary/15"
+            : "rounded-2xl rounded-bl-md border border-border/60 bg-card text-foreground",
         )}
       >
-        <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-li:my-0.5 prose-headings:mb-1 prose-headings:mt-2 prose-pre:my-2">
+        <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-p:leading-relaxed prose-li:my-0.5 prose-headings:mb-1 prose-headings:mt-2 prose-pre:my-2 prose-strong:font-semibold">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
         {streaming && (
-          <span className="ml-1 inline-block size-1.5 animate-pulse rounded-full bg-current align-middle" />
+          <span className="ml-1 inline-flex items-center gap-0.5 align-middle">
+            <span className="size-1 animate-pulse rounded-full bg-current [animation-delay:0ms]" />
+            <span className="size-1 animate-pulse rounded-full bg-current [animation-delay:150ms]" />
+            <span className="size-1 animate-pulse rounded-full bg-current [animation-delay:300ms]" />
+          </span>
         )}
       </div>
     </li>

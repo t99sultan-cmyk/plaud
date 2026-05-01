@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AudioPlayer, type AudioPlayerHandle } from "./audio-player";
+import { TranscriptSkeleton } from "./skeletons";
 import { cn, formatDuration } from "@/lib/utils";
 import type { TranscriptSegment } from "@/types/domain";
 
@@ -60,9 +61,7 @@ export function TranscriptView({
       )}
 
       {segments.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-border bg-card p-8 text-center text-sm text-muted-foreground">
-          Транскрипт пока не готов.
-        </div>
+        <TranscriptSkeleton />
       ) : (
         <div className="rounded-lg border border-border bg-card">
           <ul className="max-h-[60vh] divide-y divide-border overflow-y-auto">
