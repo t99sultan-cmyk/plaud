@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import {
   ArrowRight,
   Check,
@@ -28,11 +27,11 @@ export default async function HomePage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) redirect("/dashboard");
+  const isLoggedIn = !!user;
 
   return (
     <main className="min-h-svh bg-background">
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
       <Hero />
       <Metrics />
       <UseCases />
@@ -49,7 +48,7 @@ export default async function HomePage() {
 
 /* ─────────── HEADER ─────────── */
 
-function Header() {
+function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <header className="sticky top-0 z-30 border-b border-border/40 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
@@ -82,18 +81,30 @@ function Header() {
             FAQ
           </Link>
           <div className="ml-2 flex items-center gap-1.5">
-            <Link
-              href="/login"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
-            >
-              Войти
-            </Link>
-            <Link
-              href="/signup"
-              className={cn(buttonVariants({ size: "sm" }))}
-            >
-              Начать бесплатно
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                className={cn(buttonVariants({ size: "sm" }), "gap-1.5")}
+              >
+                Открыть приложение
+                <ArrowRight className="size-3.5" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                >
+                  Войти
+                </Link>
+                <Link
+                  href="/signup"
+                  className={cn(buttonVariants({ size: "sm" }))}
+                >
+                  Начать бесплатно
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       </div>
