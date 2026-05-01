@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FolderOpen, Inbox, Plus } from "lucide-react";
+import { FolderOpen, Inbox, MessagesSquare, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { NewFolderDialog } from "./new-folder-dialog";
@@ -47,6 +47,12 @@ export function Sidebar({
             label="Все записи"
             icon={<Inbox className="size-4" />}
             active={path === "/dashboard"}
+          />
+          <SidebarLink
+            href="/dashboard/chats"
+            label="Чаты"
+            icon={<MessagesSquare className="size-4" />}
+            active={path === "/dashboard/chats"}
           />
         </ul>
 

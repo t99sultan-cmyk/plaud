@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Dropzone } from "@/components/upload/dropzone";
 import { RecordingList } from "@/components/recording/recording-list";
+import { PromocodeWidget } from "@/components/dashboard/promocode-widget";
 import { formatDuration } from "@/lib/utils";
 import type { Recording } from "@/types/domain";
 
@@ -36,6 +37,7 @@ export default async function DashboardHome() {
         )}
       </div>
       <Dropzone folderId={null} />
+      <PromocodeWidget />
       <RecordingList initial={list} />
     </div>
   );

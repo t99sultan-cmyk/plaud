@@ -221,6 +221,75 @@ export interface Database {
         };
         Relationships: [];
       };
+      promocodes: {
+        Row: {
+          id: string;
+          code: string;
+          description: string | null;
+          type: "free_minutes" | "discount_percent" | "free_package";
+          free_minutes: number | null;
+          discount_percent: number | null;
+          package_id: string | null;
+          max_uses: number | null;
+          used_count: number;
+          expires_at: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          code: string;
+          description?: string | null;
+          type: "free_minutes" | "discount_percent" | "free_package";
+          free_minutes?: number | null;
+          discount_percent?: number | null;
+          package_id?: string | null;
+          max_uses?: number | null;
+          used_count?: number;
+          expires_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          code?: string;
+          description?: string | null;
+          type?: "free_minutes" | "discount_percent" | "free_package";
+          free_minutes?: number | null;
+          discount_percent?: number | null;
+          package_id?: string | null;
+          max_uses?: number | null;
+          used_count?: number;
+          expires_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      promocode_redemptions: {
+        Row: {
+          id: string;
+          promocode_id: string;
+          user_id: string;
+          redeemed_at: string;
+          granted_minutes: number | null;
+        };
+        Insert: {
+          id?: string;
+          promocode_id: string;
+          user_id: string;
+          redeemed_at?: string;
+          granted_minutes?: number | null;
+        };
+        Update: {
+          id?: string;
+          promocode_id?: string;
+          user_id?: string;
+          redeemed_at?: string;
+          granted_minutes?: number | null;
+        };
+        Relationships: [];
+      };
       recording_feedback: {
         Row: {
           recording_id: string;

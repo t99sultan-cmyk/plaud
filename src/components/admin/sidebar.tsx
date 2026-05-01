@@ -7,6 +7,7 @@ import {
   FileAudio,
   LayoutDashboard,
   Shield,
+  Tag,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,7 @@ const ITEMS = [
   { href: "/admin", label: "Дашборд", icon: LayoutDashboard, exact: true },
   { href: "/admin/users", label: "Пользователи", icon: Users },
   { href: "/admin/recordings", label: "Все записи", icon: FileAudio },
+  { href: "/admin/promocodes", label: "Промокоды", icon: Tag },
 ];
 
 export function AdminSidebar({ email }: { email: string }) {
