@@ -147,7 +147,7 @@ function Hero() {
         <FadeIn className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs backdrop-blur-md">
             <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-zinc-200">💜 Некоммерческий проект</span>
+            <span className="text-zinc-200">🇰🇿 Сделано в Казахстане</span>
             <span className="text-zinc-500">·</span>
             <span className="text-primary">10 минут бесплатно</span>
           </span>
@@ -164,8 +164,7 @@ function Hero() {
             Загружаешь встречу, лекцию или интервью —{" "}
             <span className="text-white">получаешь транскрипт со спикерами,
             краткое содержание и чат, в котором можно задавать вопросы по
-            содержимому записи</span>. Без подписок. Цена покрывает только
-            ИИ-провайдеров и хостинг.
+            содержимому записи</span>. Подписка от 2 998 ₸/мес — без накрутки.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -540,14 +539,14 @@ function Pricing() {
       <div className="mx-auto max-w-6xl px-6">
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-primary">
-            Цены
+            Тарифы
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-            Просто и без подписок
+            Ежемесячная подписка
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Чем больше пакет — тем меньше per-minute. Без рекуррентных списаний.
-            Кредиты не сгорают год.
+            Списываем фиксированную сумму раз в месяц — внутри пакет минут.
+            Неиспользованные минуты переносим на следующий месяц (до 2× от пакета).
           </p>
         </FadeIn>
 
@@ -560,7 +559,7 @@ function Pricing() {
               name="Бесплатно"
               price="0 ₸"
               minutes="10 минут"
-              perMin="При регистрации"
+              perMin="Без подписки"
               tagline="Чтобы попробовать"
               cta="Начать"
               ctaHref="/signup"
@@ -568,67 +567,71 @@ function Pricing() {
                 "10 минут на старте",
                 "Полный функционал",
                 "Транскрипт со спикерами",
-                "Сводка + чат",
+                "1 устройство",
               ]}
             />
           </StaggerItem>
           <StaggerItem>
             <PriceCard
               name="Старт"
-              price="1 998 ₸"
-              minutes="100 минут"
-              perMin="≈ 20 ₸ / мин"
-              tagline="Чтобы начать"
-              cta="Купить"
+              price="2 998 ₸"
+              priceUnit="/ мес"
+              minutes="200 минут / мес"
+              perMin="≈ 15 ₸ / мин"
+              tagline="Личное использование"
+              cta="Подписаться"
               ctaHref="/signup"
               features={[
-                "100 минут на счёте",
+                "200 минут каждый месяц",
                 "≈ 1-2 встречи в неделю",
-                "Не сгорает год",
-                "Можно докупать",
+                "Перенос остатка до 200 мин",
+                "До 2 устройств",
               ]}
             />
           </StaggerItem>
           <StaggerItem>
             <PriceCard
               name="Регулярно"
-              price="8 998 ₸"
-              minutes="500 минут"
-              perMin="≈ 18 ₸ / мин"
-              tagline="Для постоянной работы"
-              cta="Купить"
+              price="7 998 ₸"
+              priceUnit="/ мес"
+              minutes="800 минут / мес"
+              perMin="≈ 10 ₸ / мин"
+              tagline="Постоянная работа"
+              cta="Подписаться"
               ctaHref="/signup"
-              savings="−10%"
+              savings="−33%"
               highlight
               features={[
-                "500 минут (≈ 8 часов)",
-                "Меньше overhead на транзакцию",
-                "Хватает на месяц встреч",
-                "Чат, проекты, экспорт",
+                "800 минут каждый месяц",
+                "≈ 13 часов в месяц",
+                "Перенос до 800 мин в запас",
+                "До 2 устройств · приоритет",
               ]}
             />
           </StaggerItem>
           <StaggerItem>
             <PriceCard
               name="Активно"
-              price="31 998 ₸"
-              minutes="2 000 минут"
-              perMin="≈ 16 ₸ / мин"
-              tagline="Когда работаешь много"
-              cta="Купить"
+              price="19 998 ₸"
+              priceUnit="/ мес"
+              minutes="2 500 минут / мес"
+              perMin="≈ 8 ₸ / мин"
+              tagline="Команды и активные юзеры"
+              cta="Подписаться"
               ctaHref="/signup"
-              savings="−20%"
+              savings="−47%"
               features={[
-                "2 000 минут (≈ 33 часа)",
-                "Цена-минута минимальна",
-                "На полгода активной работы",
-                "Приоритет в очереди",
+                "2 500 минут (≈ 41 час) / мес",
+                "Минимальная цена-минута",
+                "До 2 устройств",
+                "Email-поддержка",
               ]}
             />
           </StaggerItem>
         </StaggerChildren>
 
-        <FadeIn delay={0.3} className="mx-auto mt-8 max-w-3xl">
+        <FadeIn delay={0.3} className="mx-auto mt-8 max-w-3xl space-y-3">
+          <DeviceLimitNote />
           <CostBreakdown />
         </FadeIn>
       </div>
@@ -639,6 +642,7 @@ function Pricing() {
 function PriceCard({
   name,
   price,
+  priceUnit,
   minutes,
   perMin,
   tagline,
@@ -650,6 +654,7 @@ function PriceCard({
 }: {
   name: string;
   price: string;
+  priceUnit?: string;
   minutes: string;
   perMin: string;
   tagline: string;
@@ -685,7 +690,12 @@ function PriceCard({
         <p className="text-xs text-muted-foreground">{tagline}</p>
       </div>
       <div className="mt-5 space-y-1">
-        <div className="text-3xl font-semibold tracking-tight">{price}</div>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-3xl font-semibold tracking-tight">{price}</span>
+          {priceUnit && (
+            <span className="text-sm text-muted-foreground">{priceUnit}</span>
+          )}
+        </div>
         <div className="text-sm text-muted-foreground">{minutes}</div>
         <div className="text-xs text-primary">{perMin}</div>
       </div>
@@ -715,6 +725,24 @@ function PriceCard({
   );
 }
 
+function DeviceLimitNote() {
+  return (
+    <div className="flex items-start gap-3 rounded-2xl border border-border/60 bg-card px-5 py-4">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        🔒
+      </span>
+      <div className="flex-1">
+        <p className="text-sm font-medium">Доступ с двух устройств</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Один аккаунт — максимум два активных входа (компьютер + телефон).
+          Это бережёт твои данные и не даёт делиться подпиской массово.
+          При попытке войти с третьего — старая сессия отключается.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function CostBreakdown() {
   const items = [
     { label: "AssemblyAI · транскрипция со спикерами", cost: 340 },
@@ -731,7 +759,7 @@ function CostBreakdown() {
         <span className="flex-1">
           <span className="block text-sm font-medium">Куда уходят деньги</span>
           <span className="block text-xs text-muted-foreground">
-            Это некоммерческий проект — раскроем расходы за 100 минут
+            Расходы на 100 минут обработки — без скрытых наценок
           </span>
         </span>
         <span className="text-xs text-muted-foreground transition-transform group-open:rotate-180">
@@ -753,10 +781,11 @@ function CostBreakdown() {
           <span className="font-mono tabular-nums text-primary">~{total} ₸</span>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          Цена <strong className="text-foreground">1 998 ₸</strong> покрывает
-          расходы на API-провайдеров и оставляет небольшой запас на
-          инфраструктуру, бэкапы и развитие. Прибыль здесь не цель — это
-          инструмент для людей, а не бизнес.
+          Подписка покрывает API-расходы (AssemblyAI + Claude) и инфраструктуру.
+          На больших тарифах per-minute дешевле, потому что стоимость хостинга
+          и поддержки распределяется на больший объём. Это не бизнес, нацеленный
+          на максимизацию прибыли — это устойчивый сервис, который должен
+          оплачивать сам себя.
         </p>
       </div>
     </details>
@@ -873,12 +902,16 @@ function Testimonial() {
 function FAQ() {
   const items = [
     {
-      q: "Это коммерческий проект?",
-      a: "Нет. VoiceApp создан как полезный инструмент для людей, не как бизнес. Цена 1 998 ₸ за 100 минут покрывает расходы на ИИ-провайдеров (AssemblyAI, Anthropic Claude) и инфраструктуру. Прибыль здесь не цель — мы хотим, чтобы транскрипция и сводки были доступны без подписок и навязчивых продаж.",
+      q: "Как работает подписка?",
+      a: "Раз в месяц списывается фиксированная сумма (от 2 998 ₸/мес). На балансе появляется пакет минут — расходуются по факту обработки записей. Неиспользованные минуты переносятся на следующий месяц до 2× от пакета (например, на тарифе Старт можно накопить максимум 400 минут).",
     },
     {
-      q: "Как работает оплата? Подписка или разовая?",
-      a: "Только разовая покупка пакета минут — никаких рекуррентных списаний. Кредиты остаются на балансе и не сгорают 12 месяцев. Списываются по факту обработки записи. Можно докупить ещё в любой момент.",
+      q: "Можно ли отменить подписку?",
+      a: "Да, в любой момент. После отмены остаток минут на балансе остаётся доступным до конца оплаченного месяца. Никаких штрафов, скрытых платежей или ограничений на возврат.",
+    },
+    {
+      q: "Сколько устройств может пользоваться одним аккаунтом?",
+      a: "Максимум 2 одновременных устройства (например, ноутбук + телефон). При попытке войти с третьего — самая старая сессия отключается. Это защищает данные от случайного шеринга и не даёт массово раздавать одну подписку.",
     },
     {
       q: "Что с приватностью моих записей?",
