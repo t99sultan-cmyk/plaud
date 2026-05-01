@@ -1,6 +1,7 @@
 import { inngest } from "../client";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { submitTranscription, getTranscript } from "@/lib/ai/assemblyai";
+import { deductMinutes } from "@/lib/credits";
 import type { TranscriptSegment } from "@/types/domain";
 
 const POLL_INTERVAL_SEC = 15;
@@ -114,7 +115,15 @@ export const transcribeRecording = inngest.createFunction(
       });
     });
 
-    // 6. Trigger summarize step
+    // 6. Deduct minutes from user's balance
+    await step.run("deduct-minutes", async () => {
+      const seconds = final!.audio_duration ?? 0;
+      if (seconds > 0) {
+        await deductMinutes(supa, recording.user_id, seconds);
+      }
+    });
+
+    // 7. Trigger summarize step
     await step.sendEvent("trigger-summarize", {
       name: "transcript.ready",
       data: { recordingId },

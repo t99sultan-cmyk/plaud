@@ -89,3 +89,12 @@ export interface RecordingFeedback {
   created_at: string;
   updated_at: string;
 }
+
+export interface UserCredits {
+  user_id: string;
+  free_minutes_remaining: number;
+  paid_minutes_remaining: number;
+  paid_minutes_expires_at: string | null;
+  total_minutes_used: number;
+  updated_at: string;
+}

@@ -37,7 +37,16 @@ export function useUpload(folderId: string | null) {
       });
       if ("error" in init) {
         update(localId, { status: "error", error: init.error });
-        toast.error(`Не удалось начать загрузку: ${init.error}`);
+        if (init.error === "out_of_minutes") {
+          toast.error("Минуты закончились — купи пакет", {
+            action: {
+              label: "Купить",
+              onClick: () => router.push("/checkout?plan=start"),
+            },
+          });
+        } else {
+          toast.error(`Не удалось начать загрузку: ${init.error}`);
+        }
         return;
       }
 

@@ -290,6 +290,33 @@ export interface Database {
         };
         Relationships: [];
       };
+      user_credits: {
+        Row: {
+          user_id: string;
+          free_minutes_remaining: number;
+          paid_minutes_remaining: number;
+          paid_minutes_expires_at: string | null;
+          total_minutes_used: number;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          free_minutes_remaining?: number;
+          paid_minutes_remaining?: number;
+          paid_minutes_expires_at?: string | null;
+          total_minutes_used?: number;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          free_minutes_remaining?: number;
+          paid_minutes_remaining?: number;
+          paid_minutes_expires_at?: string | null;
+          total_minutes_used?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       recording_feedback: {
         Row: {
           recording_id: string;

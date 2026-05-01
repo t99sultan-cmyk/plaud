@@ -6,6 +6,7 @@ import { randomUUID } from "node:crypto";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { inngest } from "@/lib/inngest/client";
+import { availableMinutes, getUserCredits } from "@/lib/credits";
 
 const initSchema = z.object({
   filename: z.string().min(1).max(255),
@@ -22,6 +23,17 @@ export async function initUpload(input: z.infer<typeof initSchema>) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: "unauthenticated" };
+
+  // Pre-upload: check user has any minutes left
+  const credits = await getUserCredits(supabase, user.id);
+  const minutes = availableMinutes(credits);
+  if (minutes <= 0) {
+    return {
+      error: "out_of_minutes",
+      message:
+        "Минуты на счёте закончились. Купи пакет на странице оплаты.",
+    };
+  }
 
   const recordingId = randomUUID();
   const ext = validated.filename.split(".").pop() || "audio";

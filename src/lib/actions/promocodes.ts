@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { addPaidMinutes } from "@/lib/credits";
 
 const ADMIN_EMAILS = ["t99.sultan@gmail.com"];
 
@@ -110,7 +111,7 @@ export async function redeemPromocode(input: unknown) {
     .maybeSingle();
   if (existing) return { error: "Этот код вы уже применяли" };
 
-  // Apply (in current phase only free_minutes — record redemption + increment used_count)
+  // Apply
   const granted = promo.type === "free_minutes" ? (promo.free_minutes ?? 0) : 0;
 
   const { error: insertErr } = await supa
@@ -122,12 +123,18 @@ export async function redeemPromocode(input: unknown) {
     });
   if (insertErr) return { error: insertErr.message };
 
+  // Add minutes to user balance with 30-day expiry
+  if (granted > 0) {
+    await addPaidMinutes(supa, user.id, granted);
+  }
+
   await supa
     .from("promocodes")
     .update({ used_count: promo.used_count + 1 })
     .eq("id", promo.id);
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/billing");
   return {
     ok: true,
     type: promo.type,
