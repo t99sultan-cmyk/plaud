@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Check,
   Clock,
+  Eye,
   FileAudio,
   FolderOpen,
   Globe2,
@@ -11,6 +12,7 @@ import {
   Lock,
   MessagesSquare,
   Mic,
+  Server,
   ShieldCheck,
   Sparkles,
   Users,
@@ -21,6 +23,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import { FadeIn, StaggerChildren, StaggerItem, HoverLift } from "@/components/landing/animated";
+import { AnimatedCounter } from "@/components/landing/animated-counter";
+import { getLandingStats } from "@/lib/landing-stats";
+
+export const revalidate = 300; // 5 minutes
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -29,13 +35,17 @@ export default async function HomePage() {
   } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
 
+  const stats = await getLandingStats();
+
   return (
     <main className="min-h-svh bg-background">
       <Header isLoggedIn={isLoggedIn} />
       <Hero />
-      <Metrics />
+      <LiveCounters stats={stats} />
       <UseCases />
+      <OriginStory />
       <Features />
+      <PrivacySection />
       <Comparison />
       <Pricing />
       <Testimonial />
@@ -186,6 +196,19 @@ function Hero() {
           <p className="mt-4 text-xs text-zinc-400">
             Без карты · Загрузка за 30 секунд · Готовый текст через 3-5 минут
           </p>
+
+          {/* Trust chips */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-zinc-400">
+            <TrustChip icon={<ShieldCheck className="size-3" />}>
+              Аудио хранится только у тебя
+            </TrustChip>
+            <TrustChip icon={<Server className="size-3" />}>
+              Не уходит в внешние источники
+            </TrustChip>
+            <TrustChip icon={<Eye className="size-3" />}>
+              Никаких third-party аналитиков на чате
+            </TrustChip>
+          </div>
         </FadeIn>
 
         {/* Free-trial selling block */}
@@ -248,31 +271,110 @@ function Hero() {
   );
 }
 
-/* ─────────── METRICS BAR ─────────── */
+/* ─────────── TRUST CHIP ─────────── */
 
-function Metrics() {
-  const items = [
-    { icon: Clock, label: "<6 мин", sub: "обработка часа аудио" },
-    { icon: Mic, label: "до 6 спикеров", sub: "распознаём автоматически" },
-    { icon: Globe2, label: "93 языка", sub: "RU, KK, EN и больше" },
-    { icon: ShieldCheck, label: "RLS + S3", sub: "приватные данные" },
-  ];
+function TrustChip({
+  icon,
+  children,
+}: {
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
-    <section className="border-y border-border/60 bg-card/50">
-      <StaggerChildren className="mx-auto grid max-w-6xl grid-cols-2 gap-y-6 gap-x-4 px-6 py-8 md:grid-cols-4">
-        {items.map((it) => (
-          <StaggerItem key={it.label} className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <it.icon className="size-4" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold tracking-tight">{it.label}</div>
-              <div className="text-xs text-muted-foreground">{it.sub}</div>
-            </div>
-          </StaggerItem>
-        ))}
+    <span className="inline-flex items-center gap-1.5">
+      <span className="text-emerald-400">{icon}</span>
+      {children}
+    </span>
+  );
+}
+
+/* ─────────── LIVE COUNTERS ─────────── */
+
+function LiveCounters({
+  stats,
+}: {
+  stats: {
+    totalUsers: number;
+    totalMinutes: number;
+    totalHoursSaved: number;
+    averageProcessingMinutes: number;
+  };
+}) {
+  return (
+    <section className="border-y border-border/60 bg-card/40">
+      <StaggerChildren
+        className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 gap-x-4 px-6 py-12 md:grid-cols-4"
+        delay={0.1}
+      >
+        <StaggerItem>
+          <CounterCell
+            icon={<Mic className="size-5" />}
+            value={stats.totalMinutes}
+            unit="минут"
+            label="расшифровано всего"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <CounterCell
+            icon={<Clock className="size-5" />}
+            value={stats.totalHoursSaved}
+            unit="часов"
+            label="сэкономлено пользователям"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <CounterCell
+            icon={<Users className="size-5" />}
+            value={stats.totalUsers}
+            unit=""
+            label="активных пользователей"
+            suffix="+"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <CounterCell
+            icon={<Zap className="size-5" />}
+            value={stats.averageProcessingMinutes}
+            unit="мин"
+            label="средняя обработка"
+            prefix="≈"
+          />
+        </StaggerItem>
       </StaggerChildren>
     </section>
+  );
+}
+
+function CounterCell({
+  icon,
+  value,
+  unit,
+  label,
+  prefix,
+  suffix,
+}: {
+  icon: React.ReactNode;
+  value: number;
+  unit: string;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
+      <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        {icon}
+      </div>
+      <div className="space-y-0.5">
+        <div className="text-3xl font-semibold tracking-tight tabular-nums">
+          {prefix}
+          <AnimatedCounter to={value} />
+          {suffix}
+          {unit && <span className="ml-1 text-base text-muted-foreground">{unit}</span>}
+        </div>
+        <div className="text-xs text-muted-foreground">{label}</div>
+      </div>
+    </div>
   );
 }
 
@@ -328,6 +430,75 @@ function UseCases() {
             </StaggerItem>
           ))}
         </StaggerChildren>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────── ORIGIN STORY ─────────── */
+
+function OriginStory() {
+  return (
+    <section className="relative overflow-hidden border-t border-border/60 py-24">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 40% at 50% 0%, oklch(0.45 0.18 270 / 0.08), transparent 60%)",
+        }}
+      />
+      <div className="mx-auto max-w-3xl px-6">
+        <FadeIn>
+          <p className="text-center text-sm font-medium uppercase tracking-wider text-primary">
+            Origin
+          </p>
+          <h2 className="mt-2 text-center text-3xl font-semibold tracking-tight md:text-4xl">
+            Почему мы сделали VoiceApp
+          </h2>
+        </FadeIn>
+
+        <StaggerChildren
+          className="mt-10 space-y-5 text-base leading-relaxed text-foreground/85"
+          delay={0.1}
+        >
+          <StaggerItem>
+            <p>
+              Каждое утро уходило по 30 минут на расшифровку командной планёрки
+              вручную. Платные альтернативы — Plaud за $30/мес или Otter — не
+              работают с казахским и навязывают подписки. Whisper API хорош, но
+              требует разработчика.
+            </p>
+          </StaggerItem>
+          <StaggerItem>
+            <p>
+              VoiceApp — попытка сделать <strong>простой инструмент без
+              впаривания</strong>. Один тариф, прозрачная цена, понятный
+              функционал. Аудио остаётся только у тебя — никаких third-party
+              аналитиков.
+            </p>
+          </StaggerItem>
+          <StaggerItem>
+            <p>
+              Если нашёл баг или есть идея —{" "}
+              <a
+                href="https://t.me/voise_kz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                напиши в @voise_kz
+              </a>
+              . Мы читаем каждое сообщение сами.
+            </p>
+          </StaggerItem>
+        </StaggerChildren>
+
+        <FadeIn delay={0.4} className="mt-10 flex justify-center">
+          <div className="rounded-full border border-border/60 bg-card px-4 py-2 text-xs text-muted-foreground">
+            🇰🇿 Команда VoiceApp · Алматы, 2026
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -394,6 +565,69 @@ function Features() {
                 </div>
                 <h3 className="mb-1.5 font-medium">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+              </HoverLift>
+            </StaggerItem>
+          ))}
+        </StaggerChildren>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────── PRIVACY ─────────── */
+
+function PrivacySection() {
+  const items = [
+    {
+      icon: ShieldCheck,
+      title: "Аудио остаётся только у тебя",
+      desc: "Файлы хранятся в приватном S3-сторадже Supabase, доступ только через подписанные URL с истечением. Никаких публичных ссылок — пока ты сам не создашь.",
+    },
+    {
+      icon: Lock,
+      title: "Никуда не уходит наружу",
+      desc: "Транскрипция и сводка обрабатываются у API-провайдеров (AssemblyAI, Anthropic) — обе команды публично декларируют, что данные клиентов не используются для обучения моделей.",
+    },
+    {
+      icon: Eye,
+      title: "Row Level Security в Postgres",
+      desc: "На уровне БД каждая строка привязана к user_id. Даже если кто-то получит наш сервис-ключ, доступ к чужим записям невозможен — RLS блокирует на уровне базы.",
+    },
+    {
+      icon: Server,
+      title: "Удалить можно в один клик",
+      desc: "Удаляешь запись или весь аккаунт — все аудио, транскрипты, сводки и история чатов исчезают из Postgres + Storage. Из бэкапов Supabase данные чистятся в течение 7 дней.",
+    },
+  ];
+  return (
+    <section className="border-t border-border/60 py-24">
+      <div className="mx-auto max-w-6xl px-6">
+        <FadeIn className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-medium uppercase tracking-wider text-primary">
+            Приватность
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+            Твои записи — твои
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Никаких third-party аналитиков на содержимом. Никаких внешних
+            интеграций без твоего согласия. Анонимность по умолчанию.
+          </p>
+        </FadeIn>
+        <StaggerChildren
+          className="mt-12 grid gap-4 md:grid-cols-2"
+          delay={0.1}
+        >
+          {items.map((it) => (
+            <StaggerItem key={it.title}>
+              <HoverLift className="h-full rounded-2xl border border-border/60 bg-card p-6 transition-shadow hover:shadow-md">
+                <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <it.icon className="size-5" />
+                </div>
+                <h3 className="mb-1.5 font-medium">{it.title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {it.desc}
+                </p>
               </HoverLift>
             </StaggerItem>
           ))}
@@ -1006,26 +1240,89 @@ function FinalCTA() {
 /* ─────────── FOOTER ─────────── */
 
 function Footer() {
+  const cols = [
+    {
+      title: "Продукт",
+      links: [
+        { label: "Возможности", href: "#features" },
+        { label: "Тарифы", href: "#pricing" },
+        { label: "Сравнение", href: "#use-cases" },
+        { label: "FAQ", href: "#faq" },
+      ],
+    },
+    {
+      title: "Аккаунт",
+      links: [
+        { label: "Войти", href: "/login" },
+        { label: "Регистрация", href: "/signup" },
+        { label: "Тарифы и баланс", href: "/dashboard/billing" },
+      ],
+    },
+    {
+      title: "Контакты",
+      links: [
+        { label: "@voise_kz · Telegram", href: "https://t.me/voise_kz", external: true },
+        { label: "t99.sultan@gmail.com", href: "mailto:t99.sultan@gmail.com" },
+        { label: "GitHub", href: "https://github.com/t99sultan-cmyk/plaud", external: true },
+      ],
+    },
+  ];
+
   return (
-    <footer className="border-t border-border/60 py-8">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 text-xs text-muted-foreground sm:flex-row">
-        <span>
-          © {new Date().getFullYear()} VoiceApp. Все права защищены.
-        </span>
-        <span className="flex items-center gap-4">
-          <Link href="/login" className="hover:text-foreground">
-            Войти
-          </Link>
-          <Link href="/signup" className="hover:text-foreground">
-            Регистрация
-          </Link>
-          <a
-            href="mailto:t99.sultan@gmail.com"
-            className="hover:text-foreground"
-          >
-            Связаться
-          </a>
-        </span>
+    <footer className="border-t border-border/60 bg-card/30">
+      <div className="mx-auto max-w-6xl px-6 py-12">
+        <div className="grid gap-8 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          <div>
+            <Link
+              href="/"
+              className="text-lg font-semibold tracking-tight"
+            >
+              Voice<span className="text-primary">App</span>
+            </Link>
+            <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
+              Транскрипция со спикерами, краткое содержание и чат по
+              содержимому. Сделано в Казахстане, аудио остаётся только у тебя.
+            </p>
+            <div className="mt-4 flex items-center gap-2 text-[10px] text-muted-foreground">
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Все системы работают</span>
+            </div>
+          </div>
+          {cols.map((col) => (
+            <div key={col.title}>
+              <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {col.title}
+              </h4>
+              <ul className="space-y-2 text-sm">
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    <a
+                      href={l.href}
+                      target={l.external ? "_blank" : undefined}
+                      rel={l.external ? "noopener noreferrer" : undefined}
+                      className="text-foreground/70 transition-colors hover:text-foreground"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
+          <span>
+            © {new Date().getFullYear()} VoiceApp · 🇰🇿 Сделано в Алматы · Все права защищены
+          </span>
+          <span className="flex items-center gap-4">
+            <a href="#privacy" className="hover:text-foreground">
+              Приватность
+            </a>
+            <span aria-hidden>·</span>
+            <span>Версия 1.0</span>
+          </span>
+        </div>
       </div>
     </footer>
   );

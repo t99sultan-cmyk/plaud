@@ -28,6 +28,7 @@ export interface Recording {
   duration_sec: number | null;
   status: RecordingStatus;
   error_message: string | null;
+  share_token: string | null;
   created_at: string;
   updated_at: string;
 }

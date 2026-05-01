@@ -16,6 +16,7 @@ import { SummaryView } from "@/components/recording/summary-view";
 import { ChatView } from "@/components/chat/chat-view";
 import { StatusBadge } from "@/components/recording/status-badge";
 import { RecordingActions } from "@/components/recording/recording-actions";
+import { ShareButton } from "@/components/recording/share-button";
 import { FeedbackWidget } from "@/components/recording/feedback-widget";
 import type {
   Message,
@@ -106,7 +107,15 @@ export default async function RecordingPage({
         >
           <ChevronLeft className="size-4" />К записям
         </Link>
-        <RecordingActions recording={recording} />
+        <div className="flex items-center gap-2">
+          {recording.status === "ready" && (
+            <ShareButton
+              recordingId={recording.id}
+              initialToken={recording.share_token}
+            />
+          )}
+          <RecordingActions recording={recording} />
+        </div>
       </div>
 
       <header className="space-y-2.5">

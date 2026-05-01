@@ -59,6 +59,7 @@ export interface Database {
             | "ready"
             | "failed";
           error_message: string | null;
+          share_token: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -79,6 +80,7 @@ export interface Database {
             | "ready"
             | "failed";
           error_message?: string | null;
+          share_token?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -99,6 +101,7 @@ export interface Database {
             | "ready"
             | "failed";
           error_message?: string | null;
+          share_token?: string | null;
           created_at?: string;
           updated_at?: string;
         };

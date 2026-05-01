@@ -118,6 +118,38 @@ export async function moveRecording(id: string, folderId: string | null) {
   return { ok: true };
 }
 
+export async function toggleShare(id: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "unauthenticated" };
+
+  // Read current state
+  const { data: rec, error: readErr } = await supabase
+    .from("recordings")
+    .select("id, share_token, title")
+    .eq("id", id)
+    .single();
+  if (readErr || !rec) return { error: readErr?.message ?? "not_found" };
+
+  let nextToken: string | null;
+  if (rec.share_token) {
+    nextToken = null; // revoke
+  } else {
+    nextToken = randomUUID();
+  }
+
+  const { error } = await supabase
+    .from("recordings")
+    .update({ share_token: nextToken })
+    .eq("id", id);
+  if (error) return { error: error.message };
+
+  revalidatePath(`/dashboard/recordings/${id}`);
+  return { ok: true, share_token: nextToken };
+}
+
 export async function retryTranscription(id: string) {
   const supabase = await createClient();
   const { error } = await supabase
