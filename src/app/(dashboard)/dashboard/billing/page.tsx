@@ -13,9 +13,9 @@ const PLANS = [
   {
     id: "start",
     name: "Старт",
-    price: "2 998 ₸",
-    minutes: 200,
-    perMin: "≈ 15 ₸ / мин",
+    price: "1 990 ₸",
+    minutes: 100,
+    perMin: "≈ 20 ₸ / мин",
   },
   {
     id: "regular",

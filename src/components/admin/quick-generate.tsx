@@ -12,8 +12,8 @@ const PLANS = [
   {
     id: "start",
     name: "Старт",
-    minutes: 200,
-    price: "2 998 ₸",
+    minutes: 100,
+    price: "1 990 ₸",
     color: "from-emerald-400/20 to-emerald-600/20 text-emerald-700 dark:text-emerald-300",
   },
   {
