@@ -98,7 +98,7 @@ export default async function RecordingPage({
     recording.status === "uploading";
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 px-6 py-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div className="mx-auto w-full max-w-4xl space-y-5 px-4 py-4 animate-in fade-in slide-in-from-bottom-2 duration-500 md:space-y-6 md:px-6 md:py-6">
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/dashboard"
@@ -136,20 +136,24 @@ export default async function RecordingPage({
       )}
 
       <Tabs defaultValue="transcript">
-        <TabsList>
-          <TabsTrigger value="transcript" className="gap-1.5">
-            <FileText className="size-3.5" />
-            Транскрипт
-          </TabsTrigger>
-          <TabsTrigger value="summary" className="gap-1.5">
-            <Sparkles className="size-3.5" />
-            Краткое содержание
-          </TabsTrigger>
-          <TabsTrigger value="chat" className="gap-1.5">
-            <MessagesSquare className="size-3.5" />
-            Чат
-          </TabsTrigger>
-        </TabsList>
+        <div className="sticky top-0 z-10 -mx-4 border-b border-border/40 bg-background/85 px-4 py-2 backdrop-blur-md md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
+          <TabsList className="w-full md:w-auto">
+            <TabsTrigger value="transcript" className="flex-1 gap-1.5 md:flex-initial">
+              <FileText className="size-3.5" />
+              <span className="hidden sm:inline">Транскрипт</span>
+              <span className="sm:hidden">Текст</span>
+            </TabsTrigger>
+            <TabsTrigger value="summary" className="flex-1 gap-1.5 md:flex-initial">
+              <Sparkles className="size-3.5" />
+              <span className="hidden sm:inline">Краткое содержание</span>
+              <span className="sm:hidden">Сводка</span>
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="flex-1 gap-1.5 md:flex-initial">
+              <MessagesSquare className="size-3.5" />
+              Чат
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="transcript" className="mt-5">
           <TranscriptView
             audioUrl={audioUrl}
