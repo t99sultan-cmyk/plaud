@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Eye, FileText, MessagesSquare, Sparkles } from "lucide-react";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getUser } from "@/lib/admin/queries";
+import { getFeedback, getUser } from "@/lib/admin/queries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TranscriptView } from "@/components/recording/transcript-view";
 import { SummaryView } from "@/components/recording/summary-view";
@@ -28,7 +29,7 @@ export default async function AdminRecordingPage({
     .single<Recording>();
   if (!recording) notFound();
 
-  const [{ data: transcript }, { data: summary }, { data: chat }, owner] =
+  const [{ data: transcript }, { data: summary }, { data: chat }, owner, feedback] =
     await Promise.all([
       supa
         .from("transcripts")
@@ -46,6 +47,7 @@ export default async function AdminRecordingPage({
         .eq("recording_id", id)
         .maybeSingle(),
       getUser(recording.user_id),
+      getFeedback(id),
     ]);
 
   let messages: Message[] = [];
@@ -96,6 +98,42 @@ export default async function AdminRecordingPage({
           )}
         </p>
       </header>
+
+      {feedback && (
+        <div
+          className={cn(
+            "rounded-xl border p-4",
+            feedback.rating === 1 &&
+              "border-emerald-500/30 bg-emerald-500/5",
+            feedback.rating === -1 && "border-rose-500/30 bg-rose-500/5",
+            feedback.rating === 0 && "border-border/60 bg-card",
+          )}
+        >
+          <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            {feedback.rating === 1 && (
+              <>
+                <ThumbsUp className="size-3.5 text-emerald-600" /> Положительный отзыв
+              </>
+            )}
+            {feedback.rating === -1 && (
+              <>
+                <ThumbsDown className="size-3.5 text-rose-600" /> Негативный отзыв
+              </>
+            )}
+            {feedback.rating === 0 && <>Отзыв</>}
+            <span className="ml-auto text-[11px] normal-case text-muted-foreground">
+              {formatRelativeTime(feedback.updated_at)}
+            </span>
+          </div>
+          {feedback.comment ? (
+            <p className="whitespace-pre-wrap text-sm">{feedback.comment}</p>
+          ) : (
+            <p className="text-sm italic text-muted-foreground">
+              Оценка без комментария
+            </p>
+          )}
+        </div>
+      )}
 
       <Tabs defaultValue="transcript">
         <TabsList>

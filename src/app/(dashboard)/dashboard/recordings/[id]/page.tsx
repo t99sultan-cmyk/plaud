@@ -16,7 +16,14 @@ import { SummaryView } from "@/components/recording/summary-view";
 import { ChatView } from "@/components/chat/chat-view";
 import { StatusBadge } from "@/components/recording/status-badge";
 import { RecordingActions } from "@/components/recording/recording-actions";
-import type { Message, Recording, Summary, Transcript } from "@/types/domain";
+import { FeedbackWidget } from "@/components/recording/feedback-widget";
+import type {
+  Message,
+  Recording,
+  RecordingFeedback,
+  Summary,
+  Transcript,
+} from "@/types/domain";
 import { formatDuration, formatRelativeTime } from "@/lib/utils";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -41,7 +48,12 @@ export default async function RecordingPage({
     .single<Recording>();
   if (!recording) notFound();
 
-  const [{ data: transcript }, { data: summary }, { data: chat }] = await Promise.all([
+  const [
+    { data: transcript },
+    { data: summary },
+    { data: chat },
+    { data: feedback },
+  ] = await Promise.all([
     supabase
       .from("transcripts")
       .select("*")
@@ -57,6 +69,11 @@ export default async function RecordingPage({
       .select("id")
       .eq("recording_id", id)
       .maybeSingle(),
+    supabase
+      .from("recording_feedback")
+      .select("*")
+      .eq("recording_id", id)
+      .maybeSingle<RecordingFeedback>(),
   ]);
 
   let messages: Message[] = [];
@@ -151,6 +168,10 @@ export default async function RecordingPage({
           />
         </TabsContent>
       </Tabs>
+
+      {recording.status === "ready" && (
+        <FeedbackWidget recordingId={recording.id} initial={feedback ?? null} />
+      )}
     </div>
   );
 }

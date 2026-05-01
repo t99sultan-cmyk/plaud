@@ -221,6 +221,33 @@ export interface Database {
         };
         Relationships: [];
       };
+      recording_feedback: {
+        Row: {
+          recording_id: string;
+          user_id: string;
+          rating: -1 | 0 | 1;
+          comment: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          recording_id: string;
+          user_id: string;
+          rating: -1 | 0 | 1;
+          comment?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          recording_id?: string;
+          user_id?: string;
+          rating?: -1 | 0 | 1;
+          comment?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

@@ -5,7 +5,7 @@
  */
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { Recording, RecordingStatus } from "@/types/domain";
+import type { Recording, RecordingFeedback, RecordingStatus } from "@/types/domain";
 
 export interface AdminUser {
   id: string;
@@ -142,6 +142,52 @@ export async function listAllRecordings(opts: {
     ...r,
     user_email: emailById.get(r.user_id) ?? "",
   }));
+}
+
+export interface FeedbackWithContext extends RecordingFeedback {
+  user_email: string;
+  recording_title: string;
+}
+
+export async function listFeedback(
+  limit = 50,
+): Promise<FeedbackWithContext[]> {
+  const supa = createAdminClient();
+  const { data: rows } = await supa
+    .from("recording_feedback")
+    .select("*")
+    .order("updated_at", { ascending: false })
+    .limit(limit);
+
+  if (!rows || rows.length === 0) return [];
+
+  const recordingIds = [...new Set(rows.map((r) => r.recording_id))];
+  const { data: recs } = await supa
+    .from("recordings")
+    .select("id, title")
+    .in("id", recordingIds);
+  const titleById = new Map((recs ?? []).map((r) => [r.id, r.title]));
+
+  const users = await listUsers();
+  const emailById = new Map(users.map((u) => [u.id, u.email] as const));
+
+  return rows.map((r) => ({
+    ...(r as RecordingFeedback),
+    user_email: emailById.get(r.user_id) ?? "",
+    recording_title: titleById.get(r.recording_id) ?? "(удалена)",
+  }));
+}
+
+export async function getFeedback(
+  recordingId: string,
+): Promise<RecordingFeedback | null> {
+  const supa = createAdminClient();
+  const { data } = await supa
+    .from("recording_feedback")
+    .select("*")
+    .eq("recording_id", recordingId)
+    .maybeSingle();
+  return (data as RecordingFeedback | null) ?? null;
 }
 
 export async function listUserRecordings(

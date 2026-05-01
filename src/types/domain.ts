@@ -78,3 +78,14 @@ export interface Message {
   tokens_out: number | null;
   created_at: string;
 }
+
+export type FeedbackRating = -1 | 0 | 1;
+
+export interface RecordingFeedback {
+  recording_id: string;
+  user_id: string;
+  rating: FeedbackRating;
+  comment: string | null;
+  created_at: string;
+  updated_at: string;
+}
