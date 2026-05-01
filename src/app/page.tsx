@@ -537,7 +537,7 @@ function Cell({ value, highlight }: { value: boolean | string; highlight?: boole
 function Pricing() {
   return (
     <section id="pricing" className="border-t border-border/60 py-24">
-      <div className="mx-auto max-w-4xl px-6">
+      <div className="mx-auto max-w-6xl px-6">
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-primary">
             Цены
@@ -546,12 +546,13 @@ function Pricing() {
             Просто и без подписок
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Один тариф. Без рекуррентных списаний. Кредиты не сгорают год.
+            Чем больше пакет — тем меньше per-minute. Без рекуррентных списаний.
+            Кредиты не сгорают год.
           </p>
         </FadeIn>
 
         <StaggerChildren
-          className="mx-auto mt-12 grid max-w-3xl gap-4 md:grid-cols-2"
+          className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
           delay={0.1}
         >
           <StaggerItem>
@@ -564,28 +565,64 @@ function Pricing() {
               cta="Начать"
               ctaHref="/signup"
               features={[
-                "10 минут на запись и обработку",
-                "Полный функционал — без ограничений",
+                "10 минут на старте",
+                "Полный функционал",
                 "Транскрипт со спикерами",
-                "Краткое содержание + чат",
+                "Сводка + чат",
               ]}
             />
           </StaggerItem>
           <StaggerItem>
             <PriceCard
-              name="Пакет минут"
+              name="Старт"
               price="1 998 ₸"
               minutes="100 минут"
               perMin="≈ 20 ₸ / мин"
-              tagline="Когда понадобится больше"
+              tagline="Чтобы начать"
               cta="Купить"
               ctaHref="/signup"
+              features={[
+                "100 минут на счёте",
+                "≈ 1-2 встречи в неделю",
+                "Не сгорает год",
+                "Можно докупать",
+              ]}
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PriceCard
+              name="Регулярно"
+              price="8 998 ₸"
+              minutes="500 минут"
+              perMin="≈ 18 ₸ / мин"
+              tagline="Для постоянной работы"
+              cta="Купить"
+              ctaHref="/signup"
+              savings="−10%"
               highlight
               features={[
-                "100 минут на твоём счёте",
-                "Не сгорает год",
-                "Можно докупать сколько нужно",
+                "500 минут (≈ 8 часов)",
+                "Меньше overhead на транзакцию",
+                "Хватает на месяц встреч",
                 "Чат, проекты, экспорт",
+              ]}
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PriceCard
+              name="Активно"
+              price="31 998 ₸"
+              minutes="2 000 минут"
+              perMin="≈ 16 ₸ / мин"
+              tagline="Когда работаешь много"
+              cta="Купить"
+              ctaHref="/signup"
+              savings="−20%"
+              features={[
+                "2 000 минут (≈ 33 часа)",
+                "Цена-минута минимальна",
+                "На полгода активной работы",
+                "Приоритет в очереди",
               ]}
             />
           </StaggerItem>
