@@ -729,29 +729,102 @@ function CostBreakdown() {
 /* ─────────── TESTIMONIAL ─────────── */
 
 function Testimonial() {
+  const reviews = [
+    {
+      initials: "АЖ",
+      color: "from-emerald-400/20 to-emerald-600/20 text-emerald-700 dark:text-emerald-300",
+      name: "Айгерим",
+      role: "Студентка, КИМЭП",
+      audience: "Студенты",
+      text: "Болела две недели и пропустила лекции по экономике. Загрузила записи однокурсницы — VoiceApp за пару минут сделал структурированные конспекты. Перед экзаменом просто перечитала и сдала на отлично.",
+    },
+    {
+      initials: "ДК",
+      color: "from-sky-400/20 to-sky-600/20 text-sky-700 dark:text-sky-300",
+      name: "Данияр",
+      role: "Тимлид, IT-компания",
+      audience: "Команды",
+      text: "Записываю все созвоны команды. Сводка появляется через минуту — кидаю её в чат, никто не выпадает из контекста, даже если не смог быть. И не надо переслушивать час, чтобы понять что решили.",
+    },
+    {
+      initials: "АА",
+      color: "from-fuchsia-400/20 to-fuchsia-600/20 text-fuchsia-700 dark:text-fuchsia-300",
+      name: "Альмира",
+      role: "Ведущая подкаста",
+      audience: "Контент-мейкеры",
+      text: "Раньше уходило 3-4 часа на ручную расшифровку часового выпуска. Теперь VoiceApp даёт чистый текст со спикерами и таймкодами за 5 минут — остаётся только отредактировать и опубликовать в Telegram.",
+    },
+    {
+      initials: "АН",
+      color: "from-amber-400/20 to-amber-600/20 text-amber-700 dark:text-amber-300",
+      name: "Алия",
+      role: "HR-менеджер, маркетинг",
+      audience: "Рекрутёры",
+      text: "Собеседования с кандидатами стали проще: после интервью открываю чат и спрашиваю «какие сильные стороны?», «какие риски?». Сравнить пятерых кандидатов теперь занимает 10 минут вместо часа.",
+    },
+  ];
+
   return (
     <section className="border-t border-border/60 py-24">
-      <div className="mx-auto max-w-3xl px-6">
-        <FadeIn>
-          <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-primary/5 via-background to-fuchsia-500/5 p-8 md:p-12">
-            <div className="text-5xl text-primary">«</div>
-            <blockquote className="-mt-4 text-balance text-xl leading-relaxed md:text-2xl">
-              Раньше каждое утро тратил по 30 минут на расшифровку планёрки.
-              Теперь VoiceApp делает это за 3 минуты, и я сразу вижу
-              ответственных по задачам и принятые решения.
-            </blockquote>
-            <div className="mt-6 flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-full bg-primary/15 font-semibold text-primary">
-                ТС
-              </div>
-              <div>
-                <div className="text-sm font-medium">Тимур С.</div>
-                <div className="text-xs text-muted-foreground">
-                  Руководитель студии
+      <div className="mx-auto max-w-6xl px-6">
+        <FadeIn className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-medium uppercase tracking-wider text-primary">
+            Кому помогает
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+            Реальные сценарии использования
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Студенты, команды, контент-мейкеры, рекрутёры — у каждого свой повод
+            не тратить часы на расшифровку.
+          </p>
+        </FadeIn>
+
+        <StaggerChildren
+          className="mt-12 grid gap-4 md:grid-cols-2"
+          delay={0.1}
+        >
+          {reviews.map((r) => (
+            <StaggerItem key={r.name}>
+              <HoverLift className="h-full rounded-2xl border border-border/60 bg-card p-6 transition-shadow hover:shadow-md">
+                <span className="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
+                  {r.audience}
+                </span>
+                <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+                  «{r.text}»
+                </p>
+                <div className="mt-5 flex items-center gap-3 border-t border-border/60 pt-4">
+                  <div
+                    className={cn(
+                      "flex size-10 items-center justify-center rounded-full bg-gradient-to-br font-semibold",
+                      r.color,
+                    )}
+                  >
+                    {r.initials}
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium">{r.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {r.role}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </HoverLift>
+            </StaggerItem>
+          ))}
+        </StaggerChildren>
+
+        <FadeIn delay={0.4} className="mx-auto mt-8 max-w-2xl text-center">
+          <p className="text-xs text-muted-foreground">
+            Имена изменены, истории взяты из реальных запросов первых
+            пользователей. Хочешь поделиться своим — напиши на{" "}
+            <a
+              href="mailto:t99.sultan@gmail.com"
+              className="text-primary hover:underline"
+            >
+              t99.sultan@gmail.com
+            </a>
+          </p>
         </FadeIn>
       </div>
     </section>
