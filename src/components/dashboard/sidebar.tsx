@@ -5,25 +5,43 @@ import { usePathname } from "next/navigation";
 import { FolderOpen, Inbox, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { NewFolderDialog } from "./new-folder-dialog";
 import type { Folder as FolderRow } from "@/types/domain";
 
 const DEFAULT_DOT = "bg-zinc-400 dark:bg-zinc-500";
 
-export function Sidebar({ folders }: { folders: FolderRow[] }) {
+export function Sidebar({
+  folders,
+  userEmail,
+}: {
+  folders: FolderRow[];
+  userEmail: string;
+}) {
   const path = usePathname();
+  const initials = userEmail.slice(0, 2).toUpperCase();
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-border bg-card">
-      <div className="px-5 py-5">
-        <Link href="/dashboard" className="text-lg font-semibold tracking-tight">
+    <aside className="flex h-full w-72 flex-col border-r border-border/60 bg-card">
+      <div className="flex items-center gap-2.5 px-4 py-4">
+        <Link
+          href="/dashboard"
+          className="text-base font-semibold tracking-tight"
+        >
           Voice<span className="text-primary">App</span>
         </Link>
       </div>
-      <Separator />
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <ul className="space-y-1">
+
+      <div className="mx-3 mb-2 flex items-center gap-2.5 rounded-lg bg-muted/40 px-2.5 py-2">
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+          {initials}
+        </div>
+        <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+          {userEmail}
+        </span>
+      </div>
+
+      <nav className="flex-1 overflow-y-auto px-3 py-3">
+        <ul className="space-y-0.5">
           <SidebarLink
             href="/dashboard"
             label="Все записи"
@@ -33,17 +51,17 @@ export function Sidebar({ folders }: { folders: FolderRow[] }) {
         </ul>
 
         <div className="mt-7 mb-2 flex items-center justify-between px-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             Проекты
           </span>
           <NewFolderDialog>
-            <Button variant="ghost" size="icon-xs" className="size-6">
-              <Plus className="size-3.5" />
+            <Button variant="ghost" size="icon-xs" className="size-5">
+              <Plus className="size-3" />
             </Button>
           </NewFolderDialog>
         </div>
 
-        <ul className="space-y-1">
+        <ul className="space-y-0.5">
           {folders.length === 0 && (
             <li className="px-2 py-2 text-xs text-muted-foreground">
               Создай первый проект
@@ -80,7 +98,7 @@ function SidebarLink({
       <Link
         href={href}
         className={cn(
-          "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors",
+          "flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
           active
             ? "bg-secondary text-secondary-foreground"
             : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -109,14 +127,14 @@ function ProjectLink({
       <Link
         href={href}
         className={cn(
-          "group flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors",
+          "group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
           active
             ? "bg-secondary text-secondary-foreground"
             : "text-foreground/80 hover:bg-accent hover:text-accent-foreground",
         )}
       >
         <span
-          className={cn("size-2 shrink-0 rounded-full", color ?? DEFAULT_DOT)}
+          className={cn("size-1.5 shrink-0 rounded-full", color ?? DEFAULT_DOT)}
           aria-hidden
         />
         <FolderOpen className="size-4 shrink-0 opacity-60" />
