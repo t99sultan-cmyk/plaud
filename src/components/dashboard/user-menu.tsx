@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useTransition } from "react";
-import { LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, Settings, User as UserIcon } from "lucide-react";
 import { signOut } from "@/lib/actions/auth";
 import {
   DropdownMenu,
@@ -34,6 +35,11 @@ export function UserMenu({ email }: { email: string }) {
           <UserIcon className="size-4 text-muted-foreground" />
           <span className="truncate">{email}</span>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link href="/dashboard/settings" />}>
+          <Settings className="mr-2 size-4" />
+          Настройки
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           disabled={pending}

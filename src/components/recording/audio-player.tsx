@@ -78,7 +78,8 @@ export const AudioPlayer = forwardRef<
       if (!ws || !loaded) return;
       const total = ws.getDuration();
       if (total > 0) ws.seekTo(Math.min(sec, total) / total);
-      ws.play().catch(() => {});
+      // Do NOT autoplay on seek — let user decide when to play.
+      // (Click on segment = "show me the moment", not "play it now")
     },
   }));
 

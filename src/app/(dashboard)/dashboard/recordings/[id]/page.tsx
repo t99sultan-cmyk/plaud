@@ -18,7 +18,9 @@ import { StatusBadge } from "@/components/recording/status-badge";
 import { RecordingActions } from "@/components/recording/recording-actions";
 import { ShareButton } from "@/components/recording/share-button";
 import { FeedbackWidget } from "@/components/recording/feedback-widget";
+import { InlineTitleEdit } from "@/components/recording/inline-title-edit";
 import type {
+  Folder as FolderRow,
   Message,
   Recording,
   RecordingFeedback,
@@ -54,6 +56,7 @@ export default async function RecordingPage({
     { data: summary },
     { data: chat },
     { data: feedback },
+    { data: folders },
   ] = await Promise.all([
     supabase
       .from("transcripts")
@@ -75,6 +78,10 @@ export default async function RecordingPage({
       .select("*")
       .eq("recording_id", id)
       .maybeSingle<RecordingFeedback>(),
+    supabase
+      .from("folders")
+      .select("*")
+      .order("created_at", { ascending: false }),
   ]);
 
   let messages: Message[] = [];
@@ -114,15 +121,21 @@ export default async function RecordingPage({
               initialToken={recording.share_token}
             />
           )}
-          <RecordingActions recording={recording} />
+          <RecordingActions
+            recording={recording}
+            folders={(folders ?? []) as FolderRow[]}
+          />
         </div>
       </div>
 
       <header className="space-y-2.5">
         <div className="flex items-start gap-3">
-          <h1 className="flex-1 text-3xl font-semibold tracking-tight">
-            {recording.title}
-          </h1>
+          <div className="flex-1 min-w-0">
+            <InlineTitleEdit
+              recordingId={recording.id}
+              initialTitle={recording.title}
+            />
+          </div>
           <StatusBadge status={recording.status} />
         </div>
         <p className="text-sm text-muted-foreground">

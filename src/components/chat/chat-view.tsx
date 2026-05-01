@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Loader2, MessagesSquare } from "lucide-react";
+import { Send, Loader2, MessagesSquare, Lightbulb } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -156,7 +156,30 @@ export function ChatView({
           </ul>
         )}
       </div>
-      <div className="border-t border-border p-3">
+      <div className="border-t border-border p-3 space-y-2">
+        {/* Example questions — always accessible via collapsible */}
+        {!isEmpty && (
+          <details className="group rounded-lg border border-border/60 bg-muted/20 px-3 py-1.5">
+            <summary className="flex cursor-pointer list-none items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground">
+              <Lightbulb className="size-3.5 text-primary" />
+              <span>Примеры вопросов</span>
+              <span className="ml-auto transition-transform group-open:rotate-180">⌄</span>
+            </summary>
+            <div className="mt-2 grid gap-1.5 pb-1 sm:grid-cols-2">
+              {EXAMPLE_QUESTIONS.map((q) => (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => send(q)}
+                  disabled={pending}
+                  className="rounded-md border border-border/60 bg-background px-2.5 py-1.5 text-left text-xs text-foreground/80 transition-colors hover:border-primary/40 hover:bg-accent/40 disabled:opacity-50"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </details>
+        )}
         <div className="flex gap-2">
           <Textarea
             value={input}

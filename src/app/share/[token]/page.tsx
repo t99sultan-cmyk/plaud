@@ -12,6 +12,7 @@ import { TranscriptView } from "@/components/recording/transcript-view";
 import { SummaryView } from "@/components/recording/summary-view";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { buttonVariants } from "@/components/ui/button";
+import { YandexMetrica } from "@/components/yandex-metrica";
 import { cn, formatDuration, formatRelativeTime } from "@/lib/utils";
 import type { Recording, Summary, Transcript } from "@/types/domain";
 
@@ -80,6 +81,7 @@ export default async function PublicSharePage({
 
   return (
     <main className="min-h-svh bg-background">
+      <YandexMetrica />
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 md:px-6">

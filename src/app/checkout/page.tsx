@@ -9,6 +9,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CopyChip } from "@/components/checkout/copy-chip";
+import { YandexMetrica } from "@/components/yandex-metrica";
 
 export const metadata = {
   title: "Оплата подписки — VoiceApp",
@@ -89,6 +90,7 @@ export default async function CheckoutPage({
 
   return (
     <main className="min-h-svh bg-background">
+      <YandexMetrica />
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border/40 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">

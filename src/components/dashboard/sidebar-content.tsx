@@ -6,6 +6,7 @@ import { FolderOpen, Inbox, MessagesSquare, Plus, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { NewFolderDialog } from "./new-folder-dialog";
+import { ProjectContextMenu } from "./project-context-menu";
 import type { Folder as FolderRow } from "@/types/domain";
 
 const DEFAULT_DOT = "bg-zinc-400 dark:bg-zinc-500";
@@ -93,6 +94,7 @@ export function SidebarContent({
           {folders.map((f) => (
             <ProjectLink
               key={f.id}
+              id={f.id}
               href={`/dashboard/projects/${f.id}`}
               name={f.name}
               color={f.color}
@@ -139,12 +141,14 @@ function SidebarLink({
 }
 
 function ProjectLink({
+  id,
   href,
   name,
   color,
   active,
   onClick,
 }: {
+  id: string;
   href: string;
   name: string;
   color: string | null;
@@ -153,23 +157,36 @@ function ProjectLink({
 }) {
   return (
     <li>
-      <Link
-        href={href}
-        onClick={onClick}
+      <div
         className={cn(
-          "group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+          "group flex items-center gap-1 rounded-md pr-1 transition-colors",
           active
             ? "bg-secondary text-secondary-foreground"
-            : "text-foreground/80 hover:bg-accent hover:text-accent-foreground",
+            : "hover:bg-accent",
         )}
       >
-        <span
-          className={cn("size-1.5 shrink-0 rounded-full", color ?? DEFAULT_DOT)}
-          aria-hidden
-        />
-        <FolderOpen className="size-4 shrink-0 opacity-60" />
-        <span className="truncate">{name}</span>
-      </Link>
+        <Link
+          href={href}
+          onClick={onClick}
+          className={cn(
+            "flex min-w-0 flex-1 items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+            active
+              ? "text-secondary-foreground"
+              : "text-foreground/80 hover:text-accent-foreground",
+          )}
+        >
+          <span
+            className={cn(
+              "size-1.5 shrink-0 rounded-full",
+              color ?? DEFAULT_DOT,
+            )}
+            aria-hidden
+          />
+          <FolderOpen className="size-4 shrink-0 opacity-60" />
+          <span className="truncate">{name}</span>
+        </Link>
+        <ProjectContextMenu id={id} name={name} />
+      </div>
     </li>
   );
 }

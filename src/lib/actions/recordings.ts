@@ -118,6 +118,22 @@ export async function moveRecording(id: string, folderId: string | null) {
   return { ok: true };
 }
 
+export async function renameRecording(id: string, title: string) {
+  const trimmed = title.trim();
+  if (trimmed.length < 1 || trimmed.length > 200) {
+    return { error: "Длина 1–200 символов" };
+  }
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("recordings")
+    .update({ title: trimmed })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath(`/dashboard/recordings/${id}`);
+  revalidatePath("/dashboard", "layout");
+  return { ok: true };
+}
+
 export async function toggleShare(id: string) {
   const supabase = await createClient();
   const {

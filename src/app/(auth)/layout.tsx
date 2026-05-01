@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { YandexMetrica } from "@/components/yandex-metrica";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-svh flex-col items-center justify-center gap-8 px-4 py-12">
+      <YandexMetrica />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"

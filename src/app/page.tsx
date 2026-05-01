@@ -25,6 +25,8 @@ import { createClient } from "@/lib/supabase/server";
 import { FadeIn, StaggerChildren, StaggerItem, HoverLift } from "@/components/landing/animated";
 import { AnimatedCounter } from "@/components/landing/animated-counter";
 import { ScrollProgress } from "@/components/landing/scroll-progress";
+import { MobileNav } from "@/components/landing/mobile-nav";
+import { YandexMetrica } from "@/components/yandex-metrica";
 import { getLandingStats } from "@/lib/landing-stats";
 
 export const revalidate = 300; // 5 minutes
@@ -40,14 +42,13 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-svh bg-background">
+      <YandexMetrica />
       <ScrollProgress />
       <Header isLoggedIn={isLoggedIn} />
       <Hero />
       <LiveCounters stats={stats} />
       <UseCases />
-      <OriginStory />
       <Features />
-      <PrivacySection />
       <Comparison />
       <Pricing />
       <Testimonial />
@@ -93,30 +94,33 @@ function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
             FAQ
           </Link>
           <div className="ml-2 flex items-center gap-1.5">
-            {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                className={cn(buttonVariants({ size: "sm" }), "gap-1.5")}
-              >
-                Открыть приложение
-                <ArrowRight className="size-3.5" />
-              </Link>
-            ) : (
-              <>
+            <div className="hidden sm:flex sm:items-center sm:gap-1.5">
+              {isLoggedIn ? (
                 <Link
-                  href="/login"
-                  className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                  href="/dashboard"
+                  className={cn(buttonVariants({ size: "sm" }), "gap-1.5")}
                 >
-                  Войти
+                  Открыть приложение
+                  <ArrowRight className="size-3.5" />
                 </Link>
-                <Link
-                  href="/signup"
-                  className={cn(buttonVariants({ size: "sm" }))}
-                >
-                  Начать бесплатно
-                </Link>
-              </>
-            )}
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
+                  >
+                    Войти
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className={cn(buttonVariants({ size: "sm" }))}
+                  >
+                    Начать бесплатно
+                  </Link>
+                </>
+              )}
+            </div>
+            <MobileNav isLoggedIn={isLoggedIn} />
           </div>
         </nav>
       </div>
@@ -213,49 +217,7 @@ function Hero() {
           </div>
         </FadeIn>
 
-        {/* Free-trial selling block */}
-        <FadeIn delay={0.15} className="mx-auto mt-12 max-w-3xl">
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md md:p-6">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/30 blur-3xl"
-            />
-            <div className="relative grid items-center gap-5 md:grid-cols-[auto_1fr_auto]">
-              <div className="flex items-center gap-3">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-fuchsia-500 text-2xl font-bold text-white shadow-lg shadow-primary/40">
-                  10
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-white">бесплатных минут</div>
-                  <div className="text-xs text-zinc-400">сразу после регистрации</div>
-                </div>
-              </div>
-              <ul className="space-y-1.5 text-sm text-zinc-300">
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
-                  Хватит на 1-2 коротких звонка или интервью
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
-                  Полный функционал: транскрипт, сводка, чат
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
-                  Без карты и скрытых платежей
-                </li>
-              </ul>
-              <Link
-                href="/signup"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30"
-              >
-                Получить
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            </div>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.25} className="relative mx-auto mt-16 max-w-4xl">
+        <FadeIn delay={0.2} className="relative mx-auto mt-16 max-w-4xl">
           <div
             aria-hidden
             className="absolute -inset-x-8 -inset-y-8 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/40 via-fuchsia-500/30 to-transparent blur-3xl"
@@ -661,11 +623,13 @@ function Comparison() {
             Сравнение
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-            Почему VoiceApp вместо Plaud
+            VoiceApp vs Plaud — разные подходы
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Plaud — это аппаратный диктофон с подпиской ≈$30/мес. VoiceApp — веб без
-            устройств, оплата по факту, родная поддержка казахского.
+            Plaud — отличный аппаратный диктофон-кулон + безлимит подписка. Хорош, если
+            записываешь 10+ часов в месяц и нужна носимая железка. VoiceApp — веб без
+            устройств: грузишь mp3/mp4 с компа или телефона, платишь по факту,
+            поддерживаем казахский.
           </p>
         </FadeIn>
 
@@ -911,7 +875,7 @@ function PriceCard({
     >
       {highlight && (
         <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-fuchsia-500 px-3 py-0.5 text-xs font-medium text-white shadow-md">
-          Популярно
+          Лучшая цена-минута
         </span>
       )}
       <div className="space-y-1">
@@ -1318,8 +1282,8 @@ function Footer() {
             © {new Date().getFullYear()} VoiceApp · 🇰🇿 Сделано в Алматы · Все права защищены
           </span>
           <span className="flex items-center gap-4">
-            <a href="#privacy" className="hover:text-foreground">
-              Приватность
+            <a href="#faq" className="hover:text-foreground">
+              FAQ · Приватность
             </a>
             <span aria-hidden>·</span>
             <span>Версия 1.0</span>
