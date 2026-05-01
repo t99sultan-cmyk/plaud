@@ -147,7 +147,7 @@ function Hero() {
         <FadeIn className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs backdrop-blur-md">
             <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-zinc-200">🇰🇿 Сделано в Казахстане</span>
+            <span className="text-zinc-200">💜 Некоммерческий проект</span>
             <span className="text-zinc-500">·</span>
             <span className="text-primary">10 минут бесплатно</span>
           </span>
@@ -161,9 +161,9 @@ function Hero() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-balance text-lg text-zinc-300">
-            VoiceApp превращает Zoom-созвоны, лекции и интервью в редактируемый
-            транскрипт с разделением спикеров, краткое содержание с ключевыми
-            решениями и чат, в котором можно переспрашивать кто и что сказал.
+            Сервис без подписок и навязчивых продаж. Загрузил аудио — получил
+            транскрипт со спикерами, краткое содержание и чат по содержимому.
+            Цена покрывает только API-провайдеров и хостинг.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -406,7 +406,7 @@ function Features() {
 
 function Comparison() {
   const rows: Array<{ feature: string; voice: boolean | string; plaud: boolean | string }> = [
-    { feature: "Стоимость", voice: "от 7 ₸ за минуту", plaud: "≈ 14 000 ₸ / мес" },
+    { feature: "Стоимость", voice: "20 ₸ / мин (без подписки)", plaud: "≈ 14 000 ₸ / мес" },
     { feature: "Поддержка казахского", voice: true, plaud: false },
     { feature: "Веб-приложение", voice: true, plaud: false },
     { feature: "Распознавание спикеров", voice: true, plaud: true },
@@ -535,99 +535,62 @@ function Cell({ value, highlight }: { value: boolean | string; highlight?: boole
 function Pricing() {
   return (
     <section id="pricing" className="border-t border-border/60 py-24">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-4xl px-6">
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-primary">
             Цены
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-            Платишь только за факт обработки
+            Просто и без подписок
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Без подписок. Кредиты не сгорают год. Чем больше пакет — тем дешевле минута.
+            Один тариф. Без рекуррентных списаний. Кредиты не сгорают год.
           </p>
         </FadeIn>
 
-        <StaggerChildren className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4" delay={0.1}>
+        <StaggerChildren
+          className="mx-auto mt-12 grid max-w-3xl gap-4 md:grid-cols-2"
+          delay={0.1}
+        >
           <StaggerItem>
             <PriceCard
-              name="Старт"
-              price="1 000 ₸"
+              name="Бесплатно"
+              price="0 ₸"
+              minutes="10 минут"
+              perMin="При регистрации"
+              tagline="Чтобы попробовать"
+              cta="Начать"
+              ctaHref="/signup"
+              features={[
+                "10 минут на запись и обработку",
+                "Полный функционал — без ограничений",
+                "Транскрипт со спикерами",
+                "Краткое содержание + чат",
+              ]}
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PriceCard
+              name="Пакет минут"
+              price="2 000 ₸"
               minutes="100 минут"
-              perMin="10 ₸ / мин"
-              tagline="Попробовать"
+              perMin="20 ₸ / мин"
+              tagline="Когда понадобится больше"
               cta="Купить"
               ctaHref="/signup"
-              features={[
-                "100 минут обработки",
-                "Распознавание спикеров",
-                "Транскрипт + сводка + чат",
-                "Все форматы аудио и видео",
-              ]}
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PriceCard
-              name="Mini"
-              price="4 990 ₸"
-              minutes="600 минут"
-              perMin="8.3 ₸ / мин"
-              tagline="Регулярная работа"
-              cta="Купить"
-              ctaHref="/signup"
-              savings="−17%"
-              features={[
-                "600 минут обработки",
-                "Безлимит проектов",
-                "Распознавание до 6 спикеров",
-                "Приоритет в очереди",
-              ]}
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PriceCard
-              name="Pro"
-              price="14 990 ₸"
-              minutes="2 000 минут"
-              perMin="7.5 ₸ / мин"
-              tagline="Активные пользователи"
-              cta="Купить"
-              ctaHref="/signup"
-              savings="−25%"
               highlight
               features={[
-                "2 000 минут (33 часа)",
-                "Экспорт в PDF / SRT / Markdown",
-                "Приоритет обработки",
-                "Поддержка по email",
-              ]}
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PriceCard
-              name="Команда"
-              price="49 990 ₸"
-              minutes="7 000 минут"
-              perMin="7.1 ₸ / мин"
-              tagline="Для команды"
-              cta="Скоро"
-              ctaHref="#"
-              savings="−29%"
-              features={[
-                "7 000 минут (116 часов)",
-                "До 5 пользователей",
-                "Совместный доступ к проектам",
-                "Поддержка 24/7",
+                "100 минут на твоём счёте",
+                "Не сгорает год",
+                "Можно докупать сколько нужно",
+                "Чат, проекты, экспорт",
               ]}
             />
           </StaggerItem>
         </StaggerChildren>
 
-        <FadeIn delay={0.3} className="mt-10 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-5 py-3 text-sm">
-          <Sparkles className="size-4 text-emerald-600" />
-          <span>
-            <strong>10 минут бесплатно</strong> при регистрации — попробовать без карты
-          </span>
+        <FadeIn delay={0.3} className="mx-auto mt-8 max-w-3xl">
+          <CostBreakdown />
         </FadeIn>
       </div>
     </section>
@@ -713,6 +676,54 @@ function PriceCard({
   );
 }
 
+function CostBreakdown() {
+  const items = [
+    { label: "AssemblyAI · транскрипция со спикерами", cost: 340 },
+    { label: "Anthropic Claude · сводка и чат", cost: 110 },
+    { label: "Vercel + Supabase + Inngest · хостинг", cost: 30 },
+  ];
+  const total = items.reduce((s, it) => s + it.cost, 0);
+  return (
+    <details className="group rounded-2xl border border-border/60 bg-card p-5 transition-colors open:border-primary/30">
+      <summary className="flex cursor-pointer list-none items-center gap-3">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          💜
+        </span>
+        <span className="flex-1">
+          <span className="block text-sm font-medium">Куда уходят деньги</span>
+          <span className="block text-xs text-muted-foreground">
+            Это некоммерческий проект — раскроем расходы за 100 минут
+          </span>
+        </span>
+        <span className="text-xs text-muted-foreground transition-transform group-open:rotate-180">
+          ⌄
+        </span>
+      </summary>
+      <div className="mt-5 space-y-2 border-t border-border/60 pt-4">
+        {items.map((it) => (
+          <div
+            key={it.label}
+            className="flex items-center justify-between gap-3 text-sm"
+          >
+            <span className="text-muted-foreground">{it.label}</span>
+            <span className="font-mono tabular-nums">~{it.cost} ₸</span>
+          </div>
+        ))}
+        <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-2 text-sm font-medium">
+          <span>Себестоимость 100 минут</span>
+          <span className="font-mono tabular-nums text-primary">~{total} ₸</span>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          Цена <strong className="text-foreground">2 000 ₸</strong> покрывает
+          расходы на API-провайдеров и оставляет небольшой запас на
+          инфраструктуру, бэкапы и развитие. Прибыль здесь не цель — это
+          инструмент для людей, а не бизнес.
+        </p>
+      </div>
+    </details>
+  );
+}
+
 /* ─────────── TESTIMONIAL ─────────── */
 
 function Testimonial() {
@@ -750,8 +761,12 @@ function Testimonial() {
 function FAQ() {
   const items = [
     {
+      q: "Это коммерческий проект?",
+      a: "Нет. VoiceApp создан как полезный инструмент для людей, не как бизнес. Цена 2 000 ₸ за 100 минут покрывает расходы на ИИ-провайдеров (AssemblyAI, Anthropic Claude) и инфраструктуру. Прибыль здесь не цель — мы хотим, чтобы транскрипция и сводки были доступны без подписок и навязчивых продаж.",
+    },
+    {
       q: "Как работает оплата? Подписка или разовая?",
-      a: "Разовая покупка пакета минут. Кредиты остаются на балансе и не сгорают 12 месяцев. Списываются по факту обработки записи. Можно докупить ещё в любой момент.",
+      a: "Только разовая покупка пакета минут — никаких рекуррентных списаний. Кредиты остаются на балансе и не сгорают 12 месяцев. Списываются по факту обработки записи. Можно докупить ещё в любой момент.",
     },
     {
       q: "Что с приватностью моих записей?",
@@ -763,7 +778,7 @@ function FAQ() {
     },
     {
       q: "Чем отличается от Plaud?",
-      a: "Plaud — это физический диктофон-кулон с подпиской $30/мес безлимит, нужно покупать устройство (~$170). VoiceApp — веб-приложение, ничего покупать не надо: загружаешь любой mp3/m4a/mp4 с компа или телефона. Оплата по факту использования: 7-10 ₸ за минуту. Плюс родной казахский, чат с записью и open data — всё в твоём аккаунте, можно экспортировать в любой момент.",
+      a: "Plaud — это физический диктофон-кулон с подпиской $30/мес безлимит, нужно покупать устройство (~$170). VoiceApp — веб-приложение, ничего покупать не надо: загружаешь любой mp3/m4a/mp4 с компа или телефона. Оплата по факту использования: 20 ₸ за минуту, без подписки. Плюс родной казахский, чат с записью и open data — всё в твоём аккаунте. И главное — это некоммерческий проект, мы не пытаемся максимизировать выручку.",
     },
     {
       q: "Сколько хранятся записи?",
