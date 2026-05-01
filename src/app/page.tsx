@@ -183,11 +183,53 @@ function Hero() {
           </div>
 
           <p className="mt-4 text-xs text-zinc-400">
-            Без карты · Загрузка через 30 секунд · Готовый текст через 5 минут
+            Без карты · Загрузка за 30 секунд · Готовый текст через 3-5 минут
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.2} className="relative mx-auto mt-16 max-w-4xl">
+        {/* Free-trial selling block */}
+        <FadeIn delay={0.15} className="mx-auto mt-12 max-w-3xl">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md md:p-6">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/30 blur-3xl"
+            />
+            <div className="relative grid items-center gap-5 md:grid-cols-[auto_1fr_auto]">
+              <div className="flex items-center gap-3">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-fuchsia-500 text-2xl font-bold text-white shadow-lg shadow-primary/40">
+                  10
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-white">бесплатных минут</div>
+                  <div className="text-xs text-zinc-400">сразу после регистрации</div>
+                </div>
+              </div>
+              <ul className="space-y-1.5 text-sm text-zinc-300">
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                  Хватит на 1-2 коротких звонка или интервью
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                  Полный функционал: транскрипт, сводка, чат
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                  Без карты и скрытых платежей
+                </li>
+              </ul>
+              <Link
+                href="/signup"
+                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/30"
+              >
+                Получить
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.25} className="relative mx-auto mt-16 max-w-4xl">
           <div
             aria-hidden
             className="absolute -inset-x-8 -inset-y-8 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/40 via-fuchsia-500/30 to-transparent blur-3xl"
@@ -363,59 +405,101 @@ function Features() {
 /* ─────────── COMPARISON ─────────── */
 
 function Comparison() {
-  const rows: Array<{ feature: string; voice: boolean | string; plaud: boolean | string; otter: boolean | string; whisper: boolean | string }> = [
-    { feature: "Цена за час", voice: "600 ₸", plaud: "$30/мес", otter: "$20/мес", whisper: "$0.36 + setup" },
-    { feature: "Спикеры", voice: true, plaud: true, otter: true, whisper: false },
-    { feature: "Русский", voice: true, plaud: "слабо", otter: "слабо", whisper: true },
-    { feature: "Казахский", voice: true, plaud: false, otter: false, whisper: true },
-    { feature: "Чат с записью", voice: true, plaud: false, otter: "ограничен", whisper: false },
-    { feature: "Без подписки", voice: "оплата по факту", plaud: false, otter: false, whisper: true },
+  const rows: Array<{ feature: string; voice: boolean | string; plaud: boolean | string }> = [
+    { feature: "Стоимость", voice: "от 7 ₸ за минуту", plaud: "≈ 14 000 ₸ / мес" },
+    { feature: "Поддержка казахского", voice: true, plaud: false },
+    { feature: "Веб-приложение", voice: true, plaud: false },
+    { feature: "Распознавание спикеров", voice: true, plaud: true },
+    { feature: "Чат с содержимым записи", voice: true, plaud: false },
+    { feature: "Без подписки — платишь за факт", voice: true, plaud: false },
+    { feature: "Промокоды и бонусы", voice: true, plaud: false },
+    { feature: "Нужна покупка устройства", voice: false, plaud: true },
   ];
 
   return (
     <section className="border-t border-border/60 py-24">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-4xl px-6">
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-primary">
             Сравнение
           </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-            Чем мы отличаемся
+            Почему VoiceApp вместо Plaud
           </h2>
-        </FadeIn>
-        <FadeIn delay={0.1} className="mt-10 overflow-hidden rounded-2xl border border-border/60 bg-card">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-sm">
-              <thead>
-                <tr className="border-b border-border/60 bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                  <th className="px-4 py-3 font-medium">Фича</th>
-                  <th className="px-4 py-3 font-medium">
-                    <span className="text-primary">VoiceApp</span>
-                  </th>
-                  <th className="px-4 py-3 font-medium">Plaud</th>
-                  <th className="px-4 py-3 font-medium">Otter</th>
-                  <th className="px-4 py-3 font-medium">Whisper</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r, i) => (
-                  <tr key={r.feature} className={cn(i < rows.length - 1 && "border-b border-border/60")}>
-                    <td className="px-4 py-3 font-medium">{r.feature}</td>
-                    <td className="px-4 py-3 bg-primary/5"><Cell value={r.voice} highlight /></td>
-                    <td className="px-4 py-3"><Cell value={r.plaud} /></td>
-                    <td className="px-4 py-3"><Cell value={r.otter} /></td>
-                    <td className="px-4 py-3"><Cell value={r.whisper} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="border-t border-border/60 px-4 py-2.5 text-center text-[11px] text-muted-foreground sm:hidden">
-            Прокрути таблицу горизонтально →
+          <p className="mt-3 text-muted-foreground">
+            Plaud — это аппаратный диктофон с подпиской ≈$30/мес. VoiceApp — веб без
+            устройств, оплата по факту, родная поддержка казахского.
           </p>
+        </FadeIn>
+
+        <FadeIn delay={0.1} className="mt-10 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+          <div className="grid grid-cols-[1fr_auto_auto] items-stretch">
+            {/* Header */}
+            <div className="border-b border-border/60 bg-muted/30 px-5 py-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Параметр
+            </div>
+            <div className="border-b border-border/60 bg-primary/10 px-5 py-4 text-center font-semibold tracking-tight text-primary">
+              VoiceApp
+            </div>
+            <div className="border-b border-border/60 bg-muted/30 px-5 py-4 text-center text-sm font-medium text-muted-foreground">
+              Plaud
+            </div>
+
+            {/* Rows */}
+            {rows.map((r, i) => (
+              <ComparisonRow
+                key={r.feature}
+                feature={r.feature}
+                voice={r.voice}
+                plaud={r.plaud}
+                last={i === rows.length - 1}
+              />
+            ))}
+          </div>
         </FadeIn>
       </div>
     </section>
+  );
+}
+
+function ComparisonRow({
+  feature,
+  voice,
+  plaud,
+  last,
+}: {
+  feature: string;
+  voice: boolean | string;
+  plaud: boolean | string;
+  last: boolean;
+}) {
+  return (
+    <>
+      <div
+        className={cn(
+          "px-5 py-4 text-sm font-medium",
+          !last && "border-b border-border/60",
+        )}
+      >
+        {feature}
+      </div>
+      <div
+        className={cn(
+          "flex items-center justify-center bg-primary/5 px-5 py-4",
+          !last && "border-b border-border/60",
+        )}
+      >
+        <Cell value={voice} highlight />
+      </div>
+      <div
+        className={cn(
+          "flex items-center justify-center px-5 py-4",
+          !last && "border-b border-border/60",
+        )}
+      >
+        <Cell value={plaud} />
+      </div>
+    </>
   );
 }
 
@@ -678,8 +762,8 @@ function FAQ() {
       a: "Русский, казахский, английский, плюс ещё 90 языков. Язык определяется автоматически. Для смешанных записей (русский + английский) тоже работает.",
     },
     {
-      q: "Чем отличается от Plaud и Otter?",
-      a: "Plaud — это аппаратный диктофон + подписка $30/мес безлимит. Otter — подписка $20/мес с лимитом 1200 минут. У нас оплата по факту: используешь меньше — платишь меньше. Плюс полная поддержка казахского и open data — всё в твоём аккаунте, можно экспортировать.",
+      q: "Чем отличается от Plaud?",
+      a: "Plaud — это физический диктофон-кулон с подпиской $30/мес безлимит, нужно покупать устройство (~$170). VoiceApp — веб-приложение, ничего покупать не надо: загружаешь любой mp3/m4a/mp4 с компа или телефона. Оплата по факту использования: 7-10 ₸ за минуту. Плюс родной казахский, чат с записью и open data — всё в твоём аккаунте, можно экспортировать в любой момент.",
     },
     {
       q: "Сколько хранятся записи?",
