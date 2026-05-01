@@ -37,6 +37,7 @@ export interface TranscriptSegment {
   start: number;
   end: number;
   text: string;
+  speaker?: string | null; // "A", "B", "C" etc — present when diarization succeeded
 }
 
 export interface Transcript {
