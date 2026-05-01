@@ -61,11 +61,10 @@ export async function submitTranscription(audioUrl: string): Promise<string> {
     language_detection: true,
     punctuate: true,
     format_text: true,
-    // Required as of 2026: array of explicit model IDs. Valid values:
-    // "universal-3-pro" (newest, best quality, multilingual + diarization)
-    // "universal-2" (legacy stable). We use universal-3-pro for top accuracy
-    // on Zoom-style multi-speaker recordings.
-    speech_models: ["universal-3-pro"],
+    // universal-2: stable multilingual model, supports Russian + Kazakh +
+    // English + ~90 langs, with speaker diarization. universal-3-pro is
+    // higher accuracy but English-only as of 2026 — won't work for our users.
+    speech_models: ["universal-2"],
   };
   const data = await aaiFetch<AAITranscriptResponse>("/transcript", {
     method: "POST",
