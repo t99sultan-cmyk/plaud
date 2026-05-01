@@ -7,8 +7,12 @@ import { cn } from "@/lib/utils";
 import { useUpload } from "@/hooks/use-upload";
 import { UploadQueue } from "./upload-queue";
 
+// AssemblyAI accepts both audio and video (extracts audio automatically).
+// Listing common extensions explicitly because browsers report m4a/mov MIME
+// types inconsistently (audio/x-m4a vs audio/mp4 vs application/octet-stream).
 const ACCEPT = {
-  "audio/*": [".mp3", ".m4a", ".wav", ".ogg", ".webm", ".flac", ".aac"],
+  "audio/*": [".mp3", ".m4a", ".wav", ".ogg", ".webm", ".flac", ".aac", ".aiff", ".opus", ".wma"],
+  "video/*": [".mp4", ".mov", ".m4v", ".mkv", ".webm", ".avi", ".3gp"],
 };
 
 export function Dropzone({ folderId }: { folderId: string | null }) {
@@ -64,7 +68,12 @@ export function Dropzone({ folderId }: { folderId: string | null }) {
           </p>
         </div>
         <p className="text-xs text-muted-foreground">
-          mp3 · m4a · wav · ogg · webm · flac · aac &nbsp;·&nbsp; до 500 MB
+          Аудио (mp3, m4a, wav, ogg, flac, aac) или видео (mp4, mov, mkv)
+          &nbsp;·&nbsp; до 500 MB
+        </p>
+        <p className="max-w-md text-xs text-muted-foreground/70">
+          Из видео извлечём звуковую дорожку автоматически. Время обработки
+          ≈ 15% от длительности записи (1 час аудио → ~9 мин).
         </p>
       </div>
       {items.length > 0 && <UploadQueue items={items} />}
