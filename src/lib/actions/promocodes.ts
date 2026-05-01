@@ -97,10 +97,13 @@ export async function redeemPromocode(input: unknown) {
 
   // Validate
   if (promo.max_uses !== null && promo.used_count >= promo.max_uses) {
-    return { error: "Лимит использований исчерпан" };
+    return {
+      error:
+        "Этот код уже исчерпан — все использования потрачены. Попроси у админа новый.",
+    };
   }
   if (promo.expires_at && new Date(promo.expires_at) < new Date()) {
-    return { error: "Срок действия истёк" };
+    return { error: "Срок действия кода истёк. Попроси у админа новый." };
   }
   // Check duplicate redemption
   const { data: existing } = await supa
@@ -109,7 +112,11 @@ export async function redeemPromocode(input: unknown) {
     .eq("promocode_id", promo.id)
     .eq("user_id", user.id)
     .maybeSingle();
-  if (existing) return { error: "Этот код вы уже применяли" };
+  if (existing) {
+    return {
+      error: "Ты уже применял этот код — повторно нельзя. Минуты должны быть на балансе.",
+    };
+  }
 
   // Apply
   const granted = promo.type === "free_minutes" ? (promo.free_minutes ?? 0) : 0;

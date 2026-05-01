@@ -69,11 +69,11 @@ export function Dropzone({ folderId }: { folderId: string | null }) {
         </div>
         <p className="text-xs text-muted-foreground">
           Аудио (mp3, m4a, wav, ogg, flac, aac) или видео (mp4, mov, mkv)
-          &nbsp;·&nbsp; до 500 MB
+          &nbsp;·&nbsp; до 500 MB · до 8 часов
         </p>
         <p className="max-w-md text-xs text-muted-foreground/70">
           Из видео извлечём звуковую дорожку автоматически. Время обработки
-          ≈ 15% от длительности записи (1 час аудио → ~9 мин).
+          ≈ 15% от длины: 1 час → ~9 мин, 3 часа → ~27 мин.
         </p>
       </div>
       {items.length > 0 && <UploadQueue items={items} />}
