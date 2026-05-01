@@ -1,7 +1,7 @@
 import { SignupForm } from "@/components/auth/signup-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const metadata = { title: "Регистрация — Plaud Web" };
+export const metadata = { title: "Регистрация — VoiceApp" };
 
 export default function SignupPage() {
   return (

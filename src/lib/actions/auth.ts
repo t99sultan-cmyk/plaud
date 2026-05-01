@@ -4,6 +4,21 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
+const APP_URL = process.env.APP_URL ?? "http://localhost:3000";
+
+export async function signInWithGoogle(next: string = "/dashboard") {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${APP_URL}/auth/callback?next=${encodeURIComponent(next)}`,
+    },
+  });
+  if (error) return { error: error.message };
+  if (data?.url) redirect(data.url);
+  return { error: "no_url" };
+}
+
 export async function signInWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");

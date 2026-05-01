@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import {
+  ChevronLeft,
+  FileText,
+  Loader2,
+  MessagesSquare,
+  Sparkles,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { buttonVariants } from "@/components/ui/button";
@@ -12,6 +18,13 @@ import { StatusBadge } from "@/components/recording/status-badge";
 import { RecordingActions } from "@/components/recording/recording-actions";
 import type { Message, Recording, Summary, Transcript } from "@/types/domain";
 import { formatDuration, formatRelativeTime } from "@/lib/utils";
+
+const STATUS_LABELS: Record<string, string> = {
+  uploading: "Загружаем файл…",
+  queued: "В очереди на транскрипцию…",
+  transcribing: "Идёт транскрипция…",
+  summarizing: "Генерируем краткое содержание…",
+};
 
 export default async function RecordingPage({
   params,
@@ -56,10 +69,9 @@ export default async function RecordingPage({
     messages = (data ?? []) as Message[];
   }
 
-  // Sign a URL for audio playback
   const { data: signedAudio } = await supabase.storage
     .from("recordings")
-    .createSignedUrl(recording.storage_path, 60 * 60); // 1 hour
+    .createSignedUrl(recording.storage_path, 60 * 60);
   const audioUrl = signedAudio?.signedUrl ?? "";
 
   const inProgress =
@@ -69,27 +81,27 @@ export default async function RecordingPage({
     recording.status === "uploading";
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-6">
+    <div className="mx-auto w-full max-w-4xl space-y-6 px-6 py-6">
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/dashboard"
           className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
         >
-          <ChevronLeft className="size-4" />
-          Назад
+          <ChevronLeft className="size-4" />К записям
         </Link>
         <RecordingActions recording={recording} />
       </div>
 
-      <header className="space-y-2">
+      <header className="space-y-2.5">
         <div className="flex items-start gap-3">
-          <h1 className="flex-1 text-2xl font-semibold tracking-tight">
+          <h1 className="flex-1 text-3xl font-semibold tracking-tight">
             {recording.title}
           </h1>
           <StatusBadge status={recording.status} />
         </div>
         <p className="text-sm text-muted-foreground">
-          {formatDuration(recording.duration_sec)} · {formatRelativeTime(recording.created_at)}
+          {formatDuration(recording.duration_sec)} ·{" "}
+          {formatRelativeTime(recording.created_at)}
           {recording.error_message && (
             <>
               {" · "}
@@ -100,34 +112,38 @@ export default async function RecordingPage({
       </header>
 
       {inProgress && (
-        <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-4 text-sm">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-primary/5 p-4 text-sm">
           <Loader2 className="size-4 animate-spin text-primary" />
-          <span>
-            {recording.status === "uploading" && "Загружаем файл…"}
-            {recording.status === "queued" && "В очереди на транскрипцию…"}
-            {recording.status === "transcribing" && "Идёт транскрипция…"}
-            {recording.status === "summarizing" && "Генерируем краткое содержание…"}
-          </span>
+          <span>{STATUS_LABELS[recording.status] ?? "Обработка…"}</span>
         </div>
       )}
 
       <Tabs defaultValue="transcript">
         <TabsList>
-          <TabsTrigger value="transcript">Транскрипт</TabsTrigger>
-          <TabsTrigger value="summary">Краткое содержание</TabsTrigger>
-          <TabsTrigger value="chat">Q&A чат</TabsTrigger>
+          <TabsTrigger value="transcript" className="gap-1.5">
+            <FileText className="size-3.5" />
+            Транскрипт
+          </TabsTrigger>
+          <TabsTrigger value="summary" className="gap-1.5">
+            <Sparkles className="size-3.5" />
+            Краткое содержание
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="gap-1.5">
+            <MessagesSquare className="size-3.5" />
+            Чат
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="transcript" className="mt-4">
+        <TabsContent value="transcript" className="mt-5">
           <TranscriptView
             audioUrl={audioUrl}
             durationSec={recording.duration_sec}
             segments={transcript?.segments ?? []}
           />
         </TabsContent>
-        <TabsContent value="summary" className="mt-4">
+        <TabsContent value="summary" className="mt-5">
           <SummaryView summary={summary ?? null} />
         </TabsContent>
-        <TabsContent value="chat" className="mt-4">
+        <TabsContent value="chat" className="mt-5">
           <ChatView
             recordingId={recording.id}
             initialMessages={messages}

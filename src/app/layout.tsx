@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plaud Web",
-  description: "Транскрипция, краткое содержание и Q&A для твоих аудио-записей",
+  title: "VoiceApp — транскрипция, сводка и чат с аудио",
+  description:
+    "Загружай аудио, получай транскрипт, краткое содержание и веди диалог по содержимому записи.",
 };
 
 export default function RootLayout({

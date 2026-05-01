@@ -3,7 +3,7 @@ import { Dropzone } from "@/components/upload/dropzone";
 import { RecordingList } from "@/components/recording/recording-list";
 import type { Recording } from "@/types/domain";
 
-export const metadata = { title: "Все записи — Plaud Web" };
+export const metadata = { title: "Все записи — VoiceApp" };
 
 export default async function DashboardHome() {
   const supabase = await createClient();
@@ -13,10 +13,10 @@ export default async function DashboardHome() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Все записи</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+      <div className="space-y-1.5">
+        <h1 className="text-3xl font-semibold tracking-tight">Все записи</h1>
+        <p className="text-sm text-muted-foreground">
           Загрузи аудио — мы расшифруем, сделаем краткое содержание и подготовим чат.
         </p>
       </div>

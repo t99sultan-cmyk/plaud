@@ -1,10 +1,12 @@
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Dropzone } from "@/components/upload/dropzone";
 import { RecordingList } from "@/components/recording/recording-list";
 import type { Recording } from "@/types/domain";
 
-export default async function FolderPage({
+export default async function ProjectPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -26,13 +28,25 @@ export default async function FolderPage({
     .order("created_at", { ascending: false });
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{folder.name}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Загруженные сюда аудио будут привязаны к этой папке.
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+      <nav
+        aria-label="breadcrumb"
+        className="flex items-center gap-1.5 text-sm text-muted-foreground"
+      >
+        <Link href="/dashboard" className="hover:text-foreground">
+          Все записи
+        </Link>
+        <ChevronRight className="size-3.5" />
+        <span className="text-foreground">{folder.name}</span>
+      </nav>
+
+      <div className="space-y-1.5">
+        <h1 className="text-3xl font-semibold tracking-tight">{folder.name}</h1>
+        <p className="text-sm text-muted-foreground">
+          Перетащи аудио — оно автоматически привяжется к этому проекту.
         </p>
       </div>
+
       <Dropzone folderId={folder.id} />
       <RecordingList initial={(recordings ?? []) as Recording[]} />
     </div>

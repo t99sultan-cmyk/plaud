@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const metadata = { title: "Вход — Plaud Web" };
+export const metadata = { title: "Вход — VoiceApp" };
 
 export default function LoginPage() {
   return (

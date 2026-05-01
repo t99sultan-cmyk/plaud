@@ -25,8 +25,10 @@ export function NewFolderDialog({ children }: { children: React.ReactNode }) {
       <DialogTrigger render={children as React.ReactElement} />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Новая папка</DialogTitle>
-          <DialogDescription>Группируй записи по теме или дате.</DialogDescription>
+          <DialogTitle>Новый проект</DialogTitle>
+          <DialogDescription>
+            Объедини записи по теме — встречи, лекции, интервью.
+          </DialogDescription>
         </DialogHeader>
         <form
           action={(fd) => {
@@ -35,7 +37,7 @@ export function NewFolderDialog({ children }: { children: React.ReactNode }) {
               if (res?.error) {
                 toast.error(res.error);
               } else {
-                toast.success("Папка создана");
+                toast.success("Проект создан");
                 setOpen(false);
               }
             });
@@ -43,12 +45,19 @@ export function NewFolderDialog({ children }: { children: React.ReactNode }) {
           className="grid gap-4"
         >
           <div className="grid gap-2">
-            <Label htmlFor="name">Название</Label>
-            <Input id="name" name="name" required maxLength={80} placeholder="Встречи" />
+            <Label htmlFor="name">Название проекта</Label>
+            <Input
+              id="name"
+              name="name"
+              required
+              maxLength={80}
+              placeholder="Например: Встречи команды"
+              autoFocus
+            />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={pending}>
-              {pending ? "Создаём…" : "Создать"}
+              {pending ? "Создаём…" : "Создать проект"}
             </Button>
           </DialogFooter>
         </form>
