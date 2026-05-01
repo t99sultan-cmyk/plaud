@@ -61,8 +61,9 @@ export async function submitTranscription(audioUrl: string): Promise<string> {
     language_detection: true,
     punctuate: true,
     format_text: true,
-    // No speech_model — use AssemblyAI default (best multilingual model with
-    // speaker diarization). Older "universal" value is deprecated as of 2026.
+    // Required as of 2026: array of model identifiers. "best" picks the
+    // highest-quality multilingual model that supports speaker diarization.
+    speech_models: ["best"],
   };
   const data = await aaiFetch<AAITranscriptResponse>("/transcript", {
     method: "POST",
