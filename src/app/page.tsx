@@ -580,7 +580,7 @@ function Pricing() {
               perMin="≈ 15 ₸ / мин"
               tagline="Личное использование"
               cta="Подписаться"
-              ctaHref="/signup"
+              ctaHref="/checkout?plan=start"
               features={[
                 "200 минут каждый месяц",
                 "≈ 1-2 встречи в неделю",
@@ -598,7 +598,7 @@ function Pricing() {
               perMin="≈ 10 ₸ / мин"
               tagline="Постоянная работа"
               cta="Подписаться"
-              ctaHref="/signup"
+              ctaHref="/checkout?plan=regular"
               savings="−33%"
               highlight
               features={[
@@ -618,7 +618,7 @@ function Pricing() {
               perMin="≈ 8 ₸ / мин"
               tagline="Команды и активные юзеры"
               cta="Подписаться"
-              ctaHref="/signup"
+              ctaHref="/checkout?plan=active"
               savings="−47%"
               features={[
                 "2 500 минут (≈ 41 час) / мес",
