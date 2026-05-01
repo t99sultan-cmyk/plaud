@@ -55,7 +55,7 @@ export function RecordingList({ initial }: { initial: Recording[] }) {
           <li key={r.id}>
             <Link
               href={`/dashboard/recordings/${r.id}`}
-              className="flex items-center gap-4 rounded-lg border border-border bg-card px-4 py-3.5 transition-all hover:border-primary/30 hover:shadow-sm"
+              className="flex items-center gap-4 rounded-xl border border-border/60 bg-card px-4 py-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5"
             >
               <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-muted">
                 {inProgress ? (

@@ -98,7 +98,7 @@ export default async function RecordingPage({
     recording.status === "uploading";
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 px-6 py-6">
+    <div className="mx-auto w-full max-w-4xl space-y-6 px-6 py-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/dashboard"

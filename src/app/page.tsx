@@ -116,74 +116,91 @@ function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden bg-zinc-950 text-zinc-50">
+      {/* Premium dark gradient bg */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 65% 60% at 50% -10%, oklch(0.45 0.18 270 / 0.22), transparent 60%)",
+            "radial-gradient(ellipse 80% 60% at 50% -10%, oklch(0.45 0.18 270 / 0.55), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 30%, oklch(0.6 0.2 320 / 0.25), transparent 70%)",
         }}
       />
+      {/* Grid pattern */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          maskImage: "radial-gradient(ellipse 60% 50% at 50% 0%, black, transparent 70%)",
+        }}
       />
-      <div className="mx-auto max-w-6xl px-6 pb-20 pt-16 md:pt-24">
+      {/* Top border glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent"
+      />
+
+      <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
         <FadeIn className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs backdrop-blur-md">
             <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-foreground">🇰🇿 Сделано в Казахстане</span>
-            <span className="text-muted-foreground">·</span>
-            <span className="text-primary">30 минут бесплатно</span>
+            <span className="text-zinc-200">🇰🇿 Сделано в Казахстане</span>
+            <span className="text-zinc-500">·</span>
+            <span className="text-primary">10 минут бесплатно</span>
           </span>
 
           <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
             Твоя встреча длится час —{" "}
-            <span className="bg-gradient-to-r from-primary via-fuchsia-500 to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-200 bg-clip-text text-transparent">
               текст и сводку
             </span>{" "}
             получаешь за 6 минут
           </h1>
 
-          <p className="mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
+          <p className="mt-6 max-w-2xl text-balance text-lg text-zinc-300">
             VoiceApp превращает Zoom-созвоны, лекции и интервью в редактируемый
             транскрипт с разделением спикеров, краткое содержание с ключевыми
             решениями и чат, в котором можно переспрашивать кто и что сказал.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/signup"
-              className={cn(buttonVariants({ size: "lg" }), "gap-2 px-6 shadow-lg shadow-primary/20")}
+              className="group inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-zinc-900 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/30"
             >
               Начать бесплатно
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="#use-cases"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "px-6",
-              )}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10"
             >
               Посмотреть кейсы
             </Link>
           </div>
 
-          <p className="mt-3 text-xs text-muted-foreground">
+          <p className="mt-4 text-xs text-zinc-400">
             Без карты · Загрузка через 30 секунд · Готовый текст через 5 минут
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.15} className="relative mx-auto mt-14 max-w-4xl">
+        <FadeIn delay={0.2} className="relative mx-auto mt-16 max-w-4xl">
           <div
             aria-hidden
-            className="absolute -inset-x-8 -inset-y-6 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/20 via-fuchsia-500/12 to-transparent blur-3xl"
+            className="absolute -inset-x-8 -inset-y-8 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/40 via-fuchsia-500/30 to-transparent blur-3xl"
           />
           <MockTranscriptPreview />
         </FadeIn>
       </div>
+
+      {/* Bottom fade to light */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background"
+      />
     </section>
   );
 }
@@ -367,30 +384,35 @@ function Comparison() {
           </h2>
         </FadeIn>
         <FadeIn delay={0.1} className="mt-10 overflow-hidden rounded-2xl border border-border/60 bg-card">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border/60 bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <th className="px-4 py-3 font-medium">Фича</th>
-                <th className="px-4 py-3 font-medium">
-                  <span className="text-primary">VoiceApp</span>
-                </th>
-                <th className="px-4 py-3 font-medium">Plaud</th>
-                <th className="px-4 py-3 font-medium">Otter</th>
-                <th className="px-4 py-3 font-medium">Whisper</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={r.feature} className={cn(i < rows.length - 1 && "border-b border-border/60")}>
-                  <td className="px-4 py-3 font-medium">{r.feature}</td>
-                  <td className="px-4 py-3 bg-primary/5"><Cell value={r.voice} highlight /></td>
-                  <td className="px-4 py-3"><Cell value={r.plaud} /></td>
-                  <td className="px-4 py-3"><Cell value={r.otter} /></td>
-                  <td className="px-4 py-3"><Cell value={r.whisper} /></td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm">
+              <thead>
+                <tr className="border-b border-border/60 bg-muted/30 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                  <th className="px-4 py-3 font-medium">Фича</th>
+                  <th className="px-4 py-3 font-medium">
+                    <span className="text-primary">VoiceApp</span>
+                  </th>
+                  <th className="px-4 py-3 font-medium">Plaud</th>
+                  <th className="px-4 py-3 font-medium">Otter</th>
+                  <th className="px-4 py-3 font-medium">Whisper</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={r.feature} className={cn(i < rows.length - 1 && "border-b border-border/60")}>
+                    <td className="px-4 py-3 font-medium">{r.feature}</td>
+                    <td className="px-4 py-3 bg-primary/5"><Cell value={r.voice} highlight /></td>
+                    <td className="px-4 py-3"><Cell value={r.plaud} /></td>
+                    <td className="px-4 py-3"><Cell value={r.otter} /></td>
+                    <td className="px-4 py-3"><Cell value={r.whisper} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="border-t border-border/60 px-4 py-2.5 text-center text-[11px] text-muted-foreground sm:hidden">
+            Прокрути таблицу горизонтально →
+          </p>
         </FadeIn>
       </div>
     </section>
@@ -520,7 +542,7 @@ function Pricing() {
         <FadeIn delay={0.3} className="mt-10 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-5 py-3 text-sm">
           <Sparkles className="size-4 text-emerald-600" />
           <span>
-            <strong>30 минут бесплатно</strong> при регистрации — для оценки качества
+            <strong>10 минут бесплатно</strong> при регистрации — попробовать без карты
           </span>
         </FadeIn>
       </div>
@@ -589,18 +611,20 @@ function PriceCard({
           </li>
         ))}
       </ul>
-      <Link
-        href={ctaHref}
-        className={cn(
-          buttonVariants({
-            variant: highlight ? "default" : "outline",
-            size: "default",
-          }),
-          "mt-auto pt-7 w-full",
-        )}
-      >
-        {cta}
-      </Link>
+      <div className="mt-auto pt-7">
+        <Link
+          href={ctaHref}
+          className={cn(
+            buttonVariants({
+              variant: highlight ? "default" : "outline",
+              size: "default",
+            }),
+            "w-full",
+          )}
+        >
+          {cta}
+        </Link>
+      </div>
     </HoverLift>
   );
 }
@@ -714,7 +738,7 @@ function FinalCTA() {
         <div className="mt-8 inline-flex flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-fuchsia-500/5 px-8 py-7">
           <div className="flex items-center gap-2 text-sm">
             <Zap className="size-4 text-primary" />
-            <span className="font-medium">30 минут бесплатно при регистрации</span>
+            <span className="font-medium">10 минут бесплатно при регистрации</span>
           </div>
           <Link
             href="/signup"

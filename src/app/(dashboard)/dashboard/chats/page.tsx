@@ -33,7 +33,7 @@ export default async function ChatsPage() {
   const chatRows = (chats ?? []) as ChatRow[];
   if (chatRows.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+      <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
         <Header empty />
         <EmptyState />
       </div>
@@ -82,7 +82,7 @@ export default async function ChatsPage() {
     .sort((a, b) => b.last_message_at.localeCompare(a.last_message_at));
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <Header count={previews.length} />
       {previews.length === 0 ? (
         <EmptyState />

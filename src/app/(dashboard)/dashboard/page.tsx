@@ -18,7 +18,7 @@ export default async function DashboardHome() {
   const totalSec = list.reduce((sum, r) => sum + (r.duration_sec ?? 0), 0);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <div className="flex items-end justify-between gap-4">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-semibold tracking-tight">Все записи</h1>

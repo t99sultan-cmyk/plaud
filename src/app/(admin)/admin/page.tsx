@@ -22,7 +22,7 @@ export default async function AdminDashboard() {
   const negative = feedback.filter((f) => f.rating === -1).length;
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8">
+    <div className="mx-auto w-full max-w-6xl space-y-8 px-6 py-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Дашборд</h1>
         <p className="mt-1 text-sm text-muted-foreground">

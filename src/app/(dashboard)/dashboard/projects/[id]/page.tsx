@@ -32,7 +32,7 @@ export default async function ProjectPage({
   const totalSec = list.reduce((sum, r) => sum + (r.duration_sec ?? 0), 0);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8">
+    <div className="mx-auto w-full max-w-4xl space-y-8 px-6 py-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
       <nav
         aria-label="breadcrumb"
         className="flex items-center gap-1.5 text-sm text-muted-foreground"
