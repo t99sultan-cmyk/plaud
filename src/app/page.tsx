@@ -153,17 +153,19 @@ function Hero() {
           </span>
 
           <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
-            Твоя встреча длится час —{" "}
+            Спроси у своей{" "}
             <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-200 bg-clip-text text-transparent">
-              текст и сводку
-            </span>{" "}
-            получаешь за 6 минут
+              записи
+            </span>
+            <span className="text-zinc-500">.</span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-balance text-lg text-zinc-300">
-            Сервис без подписок и навязчивых продаж. Загрузил аудио — получил
-            транскрипт со спикерами, краткое содержание и чат по содержимому.
-            Цена покрывает только API-провайдеров и хостинг.
+            Загружаешь встречу, лекцию или интервью —{" "}
+            <span className="text-white">получаешь транскрипт со спикерами,
+            краткое содержание и чат, в котором можно задавать вопросы по
+            содержимому записи</span>. Без подписок. Цена покрывает только
+            ИИ-провайдеров и хостинг.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -572,9 +574,9 @@ function Pricing() {
           <StaggerItem>
             <PriceCard
               name="Пакет минут"
-              price="2 000 ₸"
+              price="1 998 ₸"
               minutes="100 минут"
-              perMin="20 ₸ / мин"
+              perMin="≈ 20 ₸ / мин"
               tagline="Когда понадобится больше"
               cta="Купить"
               ctaHref="/signup"
@@ -714,7 +716,7 @@ function CostBreakdown() {
           <span className="font-mono tabular-nums text-primary">~{total} ₸</span>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-          Цена <strong className="text-foreground">2 000 ₸</strong> покрывает
+          Цена <strong className="text-foreground">1 998 ₸</strong> покрывает
           расходы на API-провайдеров и оставляет небольшой запас на
           инфраструктуру, бэкапы и развитие. Прибыль здесь не цель — это
           инструмент для людей, а не бизнес.
@@ -762,7 +764,7 @@ function FAQ() {
   const items = [
     {
       q: "Это коммерческий проект?",
-      a: "Нет. VoiceApp создан как полезный инструмент для людей, не как бизнес. Цена 2 000 ₸ за 100 минут покрывает расходы на ИИ-провайдеров (AssemblyAI, Anthropic Claude) и инфраструктуру. Прибыль здесь не цель — мы хотим, чтобы транскрипция и сводки были доступны без подписок и навязчивых продаж.",
+      a: "Нет. VoiceApp создан как полезный инструмент для людей, не как бизнес. Цена 1 998 ₸ за 100 минут покрывает расходы на ИИ-провайдеров (AssemblyAI, Anthropic Claude) и инфраструктуру. Прибыль здесь не цель — мы хотим, чтобы транскрипция и сводки были доступны без подписок и навязчивых продаж.",
     },
     {
       q: "Как работает оплата? Подписка или разовая?",
@@ -891,81 +893,76 @@ function Footer() {
 function MockTranscriptPreview() {
   return (
     <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl">
+      {/* Browser chrome */}
       <div className="flex items-center gap-1.5 border-b border-border/60 bg-muted/40 px-3 py-2">
         <span className="size-2.5 rounded-full bg-rose-400/70" />
         <span className="size-2.5 rounded-full bg-amber-400/70" />
         <span className="size-2.5 rounded-full bg-emerald-400/70" />
-        <span className="ml-3 text-[11px] text-muted-foreground">
-          voiceapp.app · Встреча команды · 24:18
+        <span className="ml-3 truncate text-[11px] text-muted-foreground">
+          voiceapp.app · Планёрка команды · 24:18
         </span>
       </div>
+
+      {/* Tabs row — chat is active */}
       <div className="flex items-center gap-1 border-b border-border/60 px-4 py-2 text-xs">
-        <span className="rounded-md bg-secondary px-2.5 py-1 font-medium">
-          Транскрипт
-        </span>
+        <span className="px-2.5 py-1 text-muted-foreground">Транскрипт</span>
         <span className="px-2.5 py-1 text-muted-foreground">Краткое</span>
-        <span className="px-2.5 py-1 text-muted-foreground">Чат</span>
-      </div>
-      <div className="flex items-center gap-3 border-b border-border/60 px-4 py-3">
-        <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <FileAudio className="size-3.5" />
-        </div>
-        <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
-          <div className="h-full w-1/3 bg-primary" />
-        </div>
-        <span className="text-[11px] tabular-nums text-muted-foreground">
-          08:12 / 24:18
+        <span className="rounded-md bg-secondary px-2.5 py-1 font-medium">
+          Чат
+        </span>
+        <span className="ml-auto text-[10px] text-muted-foreground">
+          Запись готова · 12 спикеров идентифицированы
         </span>
       </div>
-      <div className="space-y-3 px-4 py-4 text-left">
-        <SpeakerLine name="Спикер 1" color="emerald" time="00:42">
-          «Главное — успеть закрыть второй спринт до конца недели. Тимур, ты по
-          фронту в графике?»
-        </SpeakerLine>
-        <SpeakerLine name="Спикер 2" color="sky" time="00:51">
-          «Да, профиль и настройки делают сегодня, проектные карточки — завтра.
-          Останется только тестирование.»
-        </SpeakerLine>
-        <SpeakerLine name="Спикер 1" color="emerald" time="01:09">
-          «Окей. Тогда демо ставим на пятницу 18:00, всех зову.»
-        </SpeakerLine>
+
+      {/* Chat dialog */}
+      <div className="space-y-3 px-4 py-5 text-left">
+        <UserBubble>Кто отвечает за дизайн и какие сроки обещали?</UserBubble>
+        <AssistantBubble>
+          Дизайн ведёт <strong>Мадина (Спикер 2)</strong>. По её словам, макеты
+          закрываются <strong>к среде</strong>:
+          <em className="mt-1.5 block rounded-md bg-muted/60 px-2.5 py-1.5 text-xs not-italic text-foreground/80">
+            «Профиль и настройки делаю сегодня, проектные карточки — завтра.
+            Останется только тестирование.» — 00:51
+          </em>
+        </AssistantBubble>
+
+        <UserBubble>А когда демо?</UserBubble>
+        <AssistantBubble>
+          Демо назначено на <strong>пятницу в 18:00</strong>. Тимур (Спикер 1)
+          сказал: <em>«Тогда демо ставим на пятницу 18:00, всех зову» — 01:09</em>.
+        </AssistantBubble>
+
+        {/* Input mock */}
+        <div className="mt-4 flex items-center gap-2 rounded-lg border border-border/60 bg-muted/30 px-3 py-2">
+          <span className="flex-1 text-xs text-muted-foreground">
+            Спроси что-нибудь по записи…
+          </span>
+          <span className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <ArrowRight className="size-3" />
+          </span>
+        </div>
       </div>
     </div>
   );
 }
 
-function SpeakerLine({
-  name,
-  color,
-  time,
-  children,
-}: {
-  name: string;
-  color: "emerald" | "sky" | "amber";
-  time: string;
-  children: React.ReactNode;
-}) {
-  const colorMap: Record<string, string> = {
-    emerald: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-    sky: "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300",
-    amber: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  };
+function UserBubble({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="flex flex-col items-end gap-1 pt-0.5">
-        <span
-          className={cn(
-            "rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider",
-            colorMap[color],
-          )}
-        >
-          {name}
-        </span>
-        <span className="font-mono text-[10px] text-muted-foreground tabular-nums">
-          {time}
-        </span>
+    <div className="flex justify-end">
+      <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-3 py-2 text-sm text-primary-foreground">
+        {children}
       </div>
-      <p className="flex-1 text-sm leading-relaxed">{children}</p>
+    </div>
+  );
+}
+
+function AssistantBubble({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex justify-start">
+      <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-muted px-3 py-2 text-sm leading-relaxed text-foreground">
+        {children}
+      </div>
     </div>
   );
 }
