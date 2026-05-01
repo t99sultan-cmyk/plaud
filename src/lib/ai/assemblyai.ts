@@ -61,7 +61,8 @@ export async function submitTranscription(audioUrl: string): Promise<string> {
     language_detection: true,
     punctuate: true,
     format_text: true,
-    speech_model: "universal" as const, // best accuracy + speakers
+    // No speech_model — use AssemblyAI default (best multilingual model with
+    // speaker diarization). Older "universal" value is deprecated as of 2026.
   };
   const data = await aaiFetch<AAITranscriptResponse>("/transcript", {
     method: "POST",
