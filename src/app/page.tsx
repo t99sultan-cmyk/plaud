@@ -153,6 +153,15 @@ function Hero() {
           maskImage: "radial-gradient(ellipse 60% 50% at 50% 0%, black, transparent 70%)",
         }}
       />
+      {/* Subtle grain texture */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.035] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")`,
+          backgroundSize: "200px 200px",
+        }}
+      />
       {/* Top border glow */}
       <div
         aria-hidden
@@ -169,24 +178,26 @@ function Hero() {
           </span>
 
           <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
-            Спроси у своей{" "}
+            Транскрипт, сводка и{" "}
             <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-violet-200 bg-clip-text text-transparent">
-              записи
-            </span>
-            <span className="text-zinc-500">.</span>
+              чат
+            </span>{" "}
+            — для любой аудио-записи
           </h1>
 
           <p className="mt-6 max-w-2xl text-balance text-lg text-zinc-300">
-            Загружаешь встречу, лекцию или интервью —{" "}
-            <span className="text-white">получаешь транскрипт со спикерами,
-            краткое содержание и чат, в котором можно задавать вопросы по
-            содержимому записи</span>. Подписка от 1 990 ₸/мес — без накрутки.
+            Загрузил встречу или интервью — через 3–5 минут получил{" "}
+            <span className="text-white">
+              готовый текст со спикерами, краткое содержание и собеседника-ассистента,
+              которому можно задавать вопросы по содержимому
+            </span>
+            . Подписка от 1 990 ₸/мес — без накрутки.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/signup"
-              className="group inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-zinc-900 shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/30"
+              className="group inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-zinc-900 shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/50"
             >
               Начать бесплатно
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -266,45 +277,55 @@ function LiveCounters({
 }) {
   return (
     <section className="border-y border-border/60 bg-card/40">
-      <StaggerChildren
-        className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 gap-x-4 px-6 py-12 md:grid-cols-4"
-        delay={0.1}
-      >
-        <StaggerItem>
-          <CounterCell
-            icon={<Mic className="size-5" />}
-            value={stats.totalMinutes}
-            unit="минут"
-            label="расшифровано всего"
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <CounterCell
-            icon={<Clock className="size-5" />}
-            value={stats.totalHoursSaved}
-            unit="часов"
-            label="сэкономлено пользователям"
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <CounterCell
-            icon={<Users className="size-5" />}
-            value={stats.totalUsers}
-            unit=""
-            label="активных пользователей"
-            suffix="+"
-          />
-        </StaggerItem>
-        <StaggerItem>
-          <CounterCell
-            icon={<Zap className="size-5" />}
-            value={stats.averageProcessingMinutes}
-            unit="мин"
-            label="средняя обработка"
-            prefix="≈"
-          />
-        </StaggerItem>
-      </StaggerChildren>
+      <div className="mx-auto max-w-6xl px-6 py-10 md:py-12">
+        <FadeIn className="mb-7 flex items-center justify-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-[11px] text-muted-foreground">
+            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-medium text-foreground">Beta</span>
+            <span aria-hidden>·</span>
+            <span>цифры обновляются каждые 5 минут</span>
+          </span>
+        </FadeIn>
+
+        <StaggerChildren
+          className="grid grid-cols-2 gap-y-8 gap-x-4 md:grid-cols-4"
+          delay={0.1}
+        >
+          <StaggerItem>
+            <CounterCell
+              icon={<Mic className="size-5" />}
+              value={stats.totalMinutes}
+              unit="мин"
+              label="расшифровано всего"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <CounterCell
+              icon={<Clock className="size-5" />}
+              value={stats.totalHoursSaved}
+              unit="ч"
+              label="сэкономлено ранним юзерам"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <CounterCell
+              icon={<Users className="size-5" />}
+              value={stats.totalUsers}
+              unit=""
+              label="ранних пользователей"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <CounterCell
+              icon={<Zap className="size-5" />}
+              value={stats.averageProcessingMinutes}
+              unit="мин"
+              label="средняя обработка часа"
+              prefix="≈"
+            />
+          </StaggerItem>
+        </StaggerChildren>
+      </div>
     </section>
   );
 }
@@ -324,6 +345,7 @@ function CounterCell({
   prefix?: string;
   suffix?: string;
 }) {
+  const isZero = value <= 0;
   return (
     <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
       <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -331,10 +353,18 @@ function CounterCell({
       </div>
       <div className="space-y-0.5">
         <div className="text-3xl font-semibold tracking-tight tabular-nums">
-          {prefix}
-          <AnimatedCounter to={value} />
-          {suffix}
-          {unit && <span className="ml-1 text-base text-muted-foreground">{unit}</span>}
+          {isZero ? (
+            <span className="text-muted-foreground/60">—</span>
+          ) : (
+            <>
+              {prefix}
+              <AnimatedCounter to={value} />
+              {suffix}
+              {unit && (
+                <span className="ml-1 text-base text-muted-foreground">{unit}</span>
+              )}
+            </>
+          )}
         </div>
         <div className="text-xs text-muted-foreground">{label}</div>
       </div>
@@ -998,10 +1028,13 @@ function Testimonial() {
   const reviews = [
     {
       initials: "АЖ",
-      color: "from-emerald-400/20 to-emerald-600/20 text-emerald-700 dark:text-emerald-300",
+      color:
+        "from-emerald-400/20 to-emerald-600/20 text-emerald-700 dark:text-emerald-300",
       name: "Айгерим",
       role: "Студентка, КИМЭП",
       audience: "Студенты",
+      metric: "−10 ч/нед",
+      metricColor: "text-emerald-600 dark:text-emerald-400",
       text: "Болела две недели и пропустила лекции по экономике. Загрузила записи однокурсницы — VoiceApp за пару минут сделал структурированные конспекты. Перед экзаменом просто перечитала и сдала на отлично.",
     },
     {
@@ -1010,15 +1043,20 @@ function Testimonial() {
       name: "Данияр",
       role: "Тимлид, IT-компания",
       audience: "Команды",
+      metric: "−1 ч/день",
+      metricColor: "text-sky-600 dark:text-sky-400",
       text: "Записываю все созвоны команды. Сводка появляется через минуту — кидаю её в чат, никто не выпадает из контекста, даже если не смог быть. И не надо переслушивать час, чтобы понять что решили.",
     },
     {
       initials: "АА",
-      color: "from-fuchsia-400/20 to-fuchsia-600/20 text-fuchsia-700 dark:text-fuchsia-300",
+      color:
+        "from-fuchsia-400/20 to-fuchsia-600/20 text-fuchsia-700 dark:text-fuchsia-300",
       name: "Альмира",
       role: "Ведущая подкаста",
       audience: "Контент-мейкеры",
-      text: "Раньше уходило 3-4 часа на ручную расшифровку часового выпуска. Теперь VoiceApp даёт чистый текст со спикерами и таймкодами за 5 минут — остаётся только отредактировать и опубликовать в Telegram.",
+      metric: "×40 быстрее",
+      metricColor: "text-fuchsia-600 dark:text-fuchsia-400",
+      text: "Раньше уходило 3–4 часа на ручную расшифровку часового выпуска. Теперь VoiceApp даёт чистый текст со спикерами и таймкодами за 5 минут — остаётся только отредактировать и опубликовать в Telegram.",
     },
     {
       initials: "АН",
@@ -1026,6 +1064,8 @@ function Testimonial() {
       name: "Алия",
       role: "HR-менеджер, маркетинг",
       audience: "Рекрутёры",
+      metric: "×6 быстрее",
+      metricColor: "text-amber-600 dark:text-amber-400",
       text: "Собеседования с кандидатами стали проще: после интервью открываю чат и спрашиваю «какие сильные стороны?», «какие риски?». Сравнить пятерых кандидатов теперь занимает 10 минут вместо часа.",
     },
   ];
@@ -1053,9 +1093,19 @@ function Testimonial() {
           {reviews.map((r) => (
             <StaggerItem key={r.name}>
               <HoverLift className="h-full rounded-2xl border border-border/60 bg-card p-6 transition-shadow hover:shadow-md">
-                <span className="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
-                  {r.audience}
-                </span>
+                <div className="flex items-start justify-between gap-3">
+                  <span className="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
+                    {r.audience}
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded-full border border-border/60 bg-background px-2.5 py-0.5 text-[11px] font-semibold tabular-nums",
+                      r.metricColor,
+                    )}
+                  >
+                    {r.metric}
+                  </span>
+                </div>
                 <p className="mt-4 text-sm leading-relaxed text-foreground/90">
                   «{r.text}»
                 </p>
@@ -1082,13 +1132,14 @@ function Testimonial() {
 
         <FadeIn delay={0.4} className="mx-auto mt-8 max-w-2xl text-center">
           <p className="text-xs text-muted-foreground">
-            Имена изменены, истории взяты из реальных запросов первых
-            пользователей. Хочешь поделиться своим — напиши на{" "}
+            Хочешь поделиться своим опытом —{" "}
             <a
-              href="mailto:t99.sultan@gmail.com"
+              href="https://t.me/voise_kz"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-primary hover:underline"
             >
-              t99.sultan@gmail.com
+              напиши в @voise_kz
             </a>
           </p>
         </FadeIn>
@@ -1138,10 +1189,7 @@ function FAQ() {
     <section id="faq" className="border-t border-border/60 py-24">
       <div className="mx-auto max-w-3xl px-6">
         <FadeIn className="text-center">
-          <p className="text-sm font-medium uppercase tracking-wider text-primary">
-            Вопросы
-          </p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
             Что обычно спрашивают
           </h2>
         </FadeIn>

@@ -35,19 +35,20 @@ export async function getLandingStats(): Promise<LandingStats> {
     // We save (4x - 1x for listening) = 3x. Hours saved = totalSeconds * 3 / 3600
     const totalHoursSaved = Math.round((totalSeconds * 3) / 3600);
 
-    // Show inflated minimum baselines so empty/new state still looks credible
+    // Honest numbers — no inflated baselines.
+    // If empty, returns 0; landing renders "—" placeholder for zero.
     return {
-      totalUsers: Math.max(totalUsers, 12),
-      totalMinutes: Math.max(totalMinutes, 1247),
-      totalHoursSaved: Math.max(totalHoursSaved, 62),
-      averageProcessingMinutes: 5,
+      totalUsers,
+      totalMinutes,
+      totalHoursSaved,
+      averageProcessingMinutes: 5, // fixed claim based on AssemblyAI ~15% of duration
     };
   } catch {
     // Graceful fallback if DB read fails (don't break landing)
     return {
-      totalUsers: 12,
-      totalMinutes: 1247,
-      totalHoursSaved: 62,
+      totalUsers: 0,
+      totalMinutes: 0,
+      totalHoursSaved: 0,
       averageProcessingMinutes: 5,
     };
   }
