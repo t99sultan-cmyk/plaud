@@ -171,7 +171,7 @@ function PromoCard() {
           </h3>
           <p className="text-sm text-muted-foreground">
             Подписка от <strong className="text-foreground">1 990 ₸/мес</strong>.
-            10 минут бесплатно при регистрации.
+            40 минут бесплатно при регистрации.
           </p>
         </div>
         <Link

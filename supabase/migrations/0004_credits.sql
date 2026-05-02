@@ -8,7 +8,7 @@
 
 create table if not exists public.user_credits (
   user_id                 uuid primary key references auth.users(id) on delete cascade,
-  free_minutes_remaining  int  not null default 10 check (free_minutes_remaining >= 0),
+  free_minutes_remaining  int  not null default 40 check (free_minutes_remaining >= 0),
   paid_minutes_remaining  int  not null default 0  check (paid_minutes_remaining >= 0),
   paid_minutes_expires_at timestamptz,
   total_minutes_used      int  not null default 0,
@@ -42,7 +42,7 @@ set search_path = public
 as $$
 begin
   insert into public.user_credits (user_id, free_minutes_remaining)
-  values (new.id, 10)
+  values (new.id, 40)
   on conflict (user_id) do nothing;
   return new;
 end;

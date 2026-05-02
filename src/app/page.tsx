@@ -174,7 +174,7 @@ function Hero() {
             <span className="size-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-zinc-200">🇰🇿 Сделано в Казахстане</span>
             <span className="text-zinc-500">·</span>
-            <span className="text-primary">10 минут бесплатно</span>
+            <span className="text-primary">40 минут бесплатно</span>
           </span>
 
           <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
@@ -788,15 +788,15 @@ function Pricing() {
             <PriceCard
               name="Бесплатно"
               price="0 ₸"
-              minutes="10 минут"
+              minutes="40 минут"
               perMin="Без подписки"
               tagline="Чтобы попробовать"
               cta="Начать без карты"
               ctaHref="/signup"
               features={[
-                "10 минут на старте",
-                "Полный функционал",
-                "Транскрипт со спикерами",
+                "40 минут на старте",
+                "Хватит на одну часовую встречу",
+                "Транскрипт + сводка + чат",
                 "1 устройство",
               ]}
             />
@@ -1230,7 +1230,7 @@ function FinalCTA() {
         <div className="mt-8 inline-flex flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-fuchsia-500/5 px-8 py-7">
           <div className="flex items-center gap-2 text-sm">
             <Zap className="size-4 text-primary" />
-            <span className="font-medium">10 минут бесплатно при регистрации</span>
+            <span className="font-medium">40 минут бесплатно при регистрации</span>
           </div>
           <Link
             href="/signup"
