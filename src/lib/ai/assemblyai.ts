@@ -102,8 +102,10 @@ export async function submitTranscription(
     format_text: true,
     // universal-2: stable multilingual model — supports Russian + Kazakh +
     // English + ~90 langs with speaker diarization. universal-3-pro is more
-    // accurate but English-only as of 2026.
-    speech_model: "universal-2",
+    // accurate but English-only as of 2026, so we stick to universal-2.
+    // NB: AssemblyAI deprecated the singular `speech_model` param — it now
+    // returns HTTP 400 and requires the plural `speech_models` array.
+    speech_models: ["universal-2"],
   };
 
   if (hasLanguage) {
