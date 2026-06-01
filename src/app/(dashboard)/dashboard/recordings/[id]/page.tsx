@@ -36,12 +36,20 @@ const STATUS_LABELS: Record<string, string> = {
   summarizing: "Генерируем краткое содержание…",
 };
 
+type TabValue = "transcript" | "summary" | "chat";
+
 export default async function RecordingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string | string[] }>;
 }) {
   const { id } = await params;
+  const { tab: rawTab } = await searchParams;
+  const tabParam = Array.isArray(rawTab) ? rawTab[0] : rawTab;
+  const initialTab: TabValue =
+    tabParam === "summary" || tabParam === "chat" ? tabParam : "transcript";
   const supabase = await createClient();
 
   const { data: recording } = await supabase
@@ -157,7 +165,7 @@ export default async function RecordingPage({
         </div>
       )}
 
-      <Tabs defaultValue="transcript">
+      <Tabs defaultValue={initialTab}>
         <div className="sticky top-0 z-10 -mx-4 border-b border-border/40 bg-background/85 px-4 py-2 backdrop-blur-md md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
           <TabsList className="w-full md:w-auto">
             <TabsTrigger value="transcript" className="flex-1 gap-1.5 md:flex-initial">

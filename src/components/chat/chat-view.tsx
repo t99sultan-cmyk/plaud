@@ -67,7 +67,8 @@ export function ChatView({
     setMessages((m) => [...m, userMsg]);
 
     try {
-      const res = await fetch(`/api/chat/${recordingId}`, {
+      // basePath is "/audio" — call the route directly to avoid a POST redirect.
+      const res = await fetch(`/audio/api/chat/${recordingId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: trimmed }),

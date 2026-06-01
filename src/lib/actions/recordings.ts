@@ -7,12 +7,16 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { inngest } from "@/lib/inngest/client";
 import { availableMinutes, getUserCredits } from "@/lib/credits";
+import { requeueRecording } from "@/lib/recordings/requeue";
 
 const initSchema = z.object({
   filename: z.string().min(1).max(255),
   mimeType: z.string().min(1).max(80),
   sizeBytes: z.number().int().positive().max(500 * 1024 * 1024), // 500MB
   folderId: z.string().uuid().nullable(),
+  context: z.string().trim().max(2000).optional(),
+  // ISO 639-1 short codes — explicit means AssemblyAI skips auto-detection.
+  language: z.enum(["ru", "en", "kk", "auto"]).optional(),
 });
 
 export async function initUpload(input: z.infer<typeof initSchema>) {
@@ -39,6 +43,12 @@ export async function initUpload(input: z.infer<typeof initSchema>) {
   const ext = validated.filename.split(".").pop() || "audio";
   const storagePath = `${user.id}/${recordingId}.${ext}`;
 
+  const language =
+    validated.language && validated.language !== "auto"
+      ? validated.language
+      : null;
+  const context = validated.context ? validated.context.trim() : null;
+
   const { error: insertErr } = await supabase.from("recordings").insert({
     id: recordingId,
     user_id: user.id,
@@ -50,6 +60,21 @@ export async function initUpload(input: z.infer<typeof initSchema>) {
     status: "uploading",
   });
   if (insertErr) return { error: insertErr.message };
+
+  // Apply per-recording context/language hints in a follow-up update. Separate
+  // statement so the upload still works on DBs that haven't yet applied the
+  // 0007_recording_context migration — a missing-column error here is silently
+  // ignored.
+  if (context || language) {
+    const { error: hintsErr } = await supabase
+      .from("recordings")
+      .update({ context, language })
+      .eq("id", recordingId);
+    if (hintsErr && !/column .* does not exist/i.test(hintsErr.message)) {
+      // Real failure — surface it.
+      return { error: hintsErr.message };
+    }
+  }
 
   const { data: signed, error: urlErr } = await supabase.storage
     .from("recordings")
@@ -80,10 +105,26 @@ export async function finalizeUpload(recordingId: string) {
     .single();
   if (error || !rec) return { error: error?.message ?? "not_found" };
 
-  await inngest.send({
-    name: "recording.uploaded",
-    data: { recordingId },
-  });
+  try {
+    await inngest.send({
+      name: "recording.uploaded",
+      data: { recordingId },
+    });
+  } catch {
+    // The file is uploaded and the row is `queued`, but the queue event never
+    // left. Mark it `failed` so the user sees the "Повторить" button instead of
+    // an endless spinner.
+    await supabase
+      .from("recordings")
+      .update({
+        status: "failed",
+        error_message:
+          "Не удалось поставить запись в очередь обработки. Нажми «Повторить транскрипцию».",
+      })
+      .eq("id", recordingId);
+    revalidatePath("/dashboard", "layout");
+    return { error: "queue_failed" };
+  }
 
   revalidatePath("/dashboard", "layout");
   return { ok: true };
@@ -168,16 +209,17 @@ export async function toggleShare(id: string) {
 
 export async function retryTranscription(id: string) {
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("recordings")
-    .update({ status: "queued", error_message: null })
-    .eq("id", id);
-  if (error) return { error: error.message };
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "unauthenticated" };
 
-  await inngest.send({
-    name: "recording.uploaded",
-    data: { recordingId: id },
-  });
+  // requeueRecording picks the right entry point: re-summarize when a
+  // transcript already exists (no re-charge), else full re-transcription.
+  const result = await requeueRecording(supabase, id);
+  if ("error" in result) return result;
+
   revalidatePath("/dashboard", "layout");
+  revalidatePath(`/dashboard/recordings/${id}`);
   return { ok: true };
 }

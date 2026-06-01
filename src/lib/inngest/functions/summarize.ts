@@ -8,6 +8,28 @@ export const summarizeRecording = inngest.createFunction(
     id: "summarize-recording",
     retries: 2,
     triggers: [{ event: "transcript.ready" }],
+    // Same safety net as transcribe: a failed summary must mark the recording
+    // `failed` (it otherwise sticks in `summarizing` forever). The transcript
+    // already exists, so a retry will only re-run summarization.
+    onFailure: async ({ event, error }) => {
+      const original = event.data.event as unknown as {
+        data?: { recordingId?: string };
+      };
+      const recordingId = original?.data?.recordingId;
+      if (!recordingId) return;
+      const supa = createAdminClient();
+      await supa
+        .from("recordings")
+        .update({
+          status: "failed",
+          error_message: `Не удалось сформировать сводку: ${error.message}`.slice(
+            0,
+            500,
+          ),
+        })
+        .eq("id", recordingId)
+        .in("status", ["summarizing", "queued", "transcribing"]);
+    },
   },
   async ({ event, step }) => {
     const { recordingId } = event.data as { recordingId: string };

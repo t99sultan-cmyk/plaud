@@ -3,18 +3,25 @@ import { Dropzone } from "@/components/upload/dropzone";
 import { RecordingList } from "@/components/recording/recording-list";
 import { PromocodeWidget } from "@/components/dashboard/promocode-widget";
 import { formatDuration } from "@/lib/utils";
-import type { Recording } from "@/types/domain";
+import type { Folder as FolderRow, Recording } from "@/types/domain";
 
 export const metadata = { title: "Все записи — VoiceApp" };
 
 export default async function DashboardHome() {
   const supabase = await createClient();
-  const { data: recordings } = await supabase
-    .from("recordings")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [{ data: recordings }, { data: folders }] = await Promise.all([
+    supabase
+      .from("recordings")
+      .select("*")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("folders")
+      .select("*")
+      .order("created_at", { ascending: false }),
+  ]);
 
   const list = (recordings ?? []) as Recording[];
+  const folderList = (folders ?? []) as FolderRow[];
   const totalSec = list.reduce((sum, r) => sum + (r.duration_sec ?? 0), 0);
 
   return (
@@ -38,7 +45,7 @@ export default async function DashboardHome() {
       </div>
       <Dropzone folderId={null} />
       <PromocodeWidget />
-      <RecordingList initial={list} />
+      <RecordingList initial={list} folders={folderList} />
     </div>
   );
 }

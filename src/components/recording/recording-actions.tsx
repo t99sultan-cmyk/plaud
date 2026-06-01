@@ -47,7 +47,7 @@ export function RecordingActions({
                 e.preventDefault();
                 start(async () => {
                   const r = await retryTranscription(recording.id);
-                  if (r?.error) toast.error(r.error);
+                  if ("error" in r) toast.error(r.error);
                   else {
                     toast.success("Попытка повторной транскрипции");
                     router.refresh();

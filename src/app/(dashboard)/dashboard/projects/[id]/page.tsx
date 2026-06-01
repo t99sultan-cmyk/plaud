@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Dropzone } from "@/components/upload/dropzone";
 import { RecordingList } from "@/components/recording/recording-list";
 import { formatDuration } from "@/lib/utils";
-import type { Recording } from "@/types/domain";
+import type { Folder as FolderRow, Recording } from "@/types/domain";
 
 export default async function ProjectPage({
   params,
@@ -22,13 +22,20 @@ export default async function ProjectPage({
     .single();
   if (!folder) notFound();
 
-  const { data: recordings } = await supabase
-    .from("recordings")
-    .select("*")
-    .eq("folder_id", id)
-    .order("created_at", { ascending: false });
+  const [{ data: recordings }, { data: folders }] = await Promise.all([
+    supabase
+      .from("recordings")
+      .select("*")
+      .eq("folder_id", id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("folders")
+      .select("*")
+      .order("created_at", { ascending: false }),
+  ]);
 
   const list = (recordings ?? []) as Recording[];
+  const folderList = (folders ?? []) as FolderRow[];
   const totalSec = list.reduce((sum, r) => sum + (r.duration_sec ?? 0), 0);
 
   return (
@@ -63,7 +70,7 @@ export default async function ProjectPage({
       </div>
 
       <Dropzone folderId={folder.id} />
-      <RecordingList initial={list} />
+      <RecordingList initial={list} folders={folderList} />
     </div>
   );
 }

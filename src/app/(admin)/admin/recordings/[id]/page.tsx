@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TranscriptView } from "@/components/recording/transcript-view";
 import { SummaryView } from "@/components/recording/summary-view";
 import { StatusBadge } from "@/components/recording/status-badge";
+import { AdminRetryButton } from "@/components/admin/admin-retry-button";
 import { buttonVariants } from "@/components/ui/button";
 import { cn, formatDuration, formatRelativeTime } from "@/lib/utils";
 import type { Message, Recording, Summary, Transcript } from "@/types/domain";
@@ -85,6 +86,9 @@ export default async function AdminRecordingPage({
           <h1 className="flex-1 text-3xl font-semibold tracking-tight">
             {recording.title}
           </h1>
+          {["failed", "uploading", "queued", "transcribing", "summarizing"].includes(
+            recording.status,
+          ) && <AdminRetryButton recordingId={recording.id} />}
           <StatusBadge status={recording.status} />
         </div>
         <p className="text-sm text-muted-foreground">

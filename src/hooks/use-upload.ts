@@ -14,6 +14,13 @@ export interface UploadItem {
   error?: string;
 }
 
+export type UploadLanguage = "ru" | "en" | "kk" | "auto";
+
+export interface EnqueueOptions {
+  context?: string;
+  language?: UploadLanguage;
+}
+
 export function useUpload(folderId: string | null) {
   const router = useRouter();
   const [items, setItems] = useState<UploadItem[]>([]);
@@ -22,7 +29,7 @@ export function useUpload(folderId: string | null) {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)));
 
   const enqueue = useCallback(
-    async (file: File) => {
+    async (file: File, opts: EnqueueOptions = {}) => {
       const localId = crypto.randomUUID();
       setItems((prev) => [
         ...prev,
@@ -34,6 +41,8 @@ export function useUpload(folderId: string | null) {
         mimeType: file.type || "audio/mpeg",
         sizeBytes: file.size,
         folderId,
+        context: opts.context,
+        language: opts.language,
       });
       if ("error" in init) {
         update(localId, { status: "error", error: init.error });
