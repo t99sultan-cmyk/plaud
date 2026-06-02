@@ -61,18 +61,19 @@ export async function initUpload(input: z.infer<typeof initSchema>) {
   });
   if (insertErr) return { error: insertErr.message };
 
-  // Apply per-recording context/language hints in a follow-up update. Separate
-  // statement so the upload still works on DBs that haven't yet applied the
-  // 0007_recording_context migration — a missing-column error here is silently
-  // ignored.
+  // Apply per-recording context/language hints in a follow-up update. These are
+  // OPTIONAL metadata — saving them must NEVER block the upload. If migration
+  // 0007 hasn't been applied, PostgREST returns either "column ... does not
+  // exist" or PGRST204 "Could not find the '...' column ... in the schema
+  // cache"; on that (or any other error) we just log and proceed, so the
+  // recording still uploads and transcribes (language falls back to auto-detect).
   if (context || language) {
     const { error: hintsErr } = await supabase
       .from("recordings")
       .update({ context, language })
       .eq("id", recordingId);
-    if (hintsErr && !/column .* does not exist/i.test(hintsErr.message)) {
-      // Real failure — surface it.
-      return { error: hintsErr.message };
+    if (hintsErr) {
+      console.warn("recording hints not saved (continuing):", hintsErr.message);
     }
   }
 
